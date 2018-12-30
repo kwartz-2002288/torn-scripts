@@ -16,9 +16,8 @@ def getKeyDict(file_name):
 def getDicts():
     " get the two dictionnaries needed "
 
-    #repertory = '/home/jpr/Documents/torn/files/'  # Rapsberry path
-    #repertory = '/Users/jpr/Documents/Dropbox/JP-Manu/torn/files/' # MacBook path
-    repertory = '/Users/jpr/Dropbox/JP-Manu/torn/files/' # iMac path
+    repertory = '/home/jpr/Documents/torn/files/'  # Rapsberry path
+    #repertory = '/Users/jpr/Dropbox/JP-Manu/torn/files/' # iMac or MacBook path
 
     APIKey = getKeyDict(repertory+'APIKeys.txt')
     sheetKey = getKeyDict(repertory+'sheetKeys.txt')
