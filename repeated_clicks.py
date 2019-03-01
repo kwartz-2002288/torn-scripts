@@ -3,15 +3,16 @@ import random
 import time
 
 # number of clicks
+
 nMax = int(input('Enter the max number of tokens to play and press [return]: '))
 nToken = nMax
 
 # centre position of the button
 # find out what you want by running pyautogui.position()
-void=input('Center the mouse on the zone you want to click and press [return] !')
+void=input('Center the mouse on the zone you want to click and press [return] ')
 
 (x0, y0) = pyautogui.position()
-# first click to activate the browser page
+# first click activates the page
 pyautogui.click(x=x0, y=y0)
 time.sleep(0.2)
 
