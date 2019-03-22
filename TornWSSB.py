@@ -32,7 +32,7 @@ for i,name in enumerate(APIKey_dict):
     ws.update_cell(i+2,2,t_educ)
     if user_stocks is not None:
         for k in user_stocks:
-            if user_stocks[k]['stock_id'] == 25:
+            if user_stocks[k]['stock_id'] == 25 and user_stocks[k]['shares'] >= 1000000:
                 users_list.append(name)
                 
 # Open the WSSB sheet
