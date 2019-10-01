@@ -13,7 +13,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, sco
 gc = gspread.authorize(credentials)
 
 def getFactionDonation( APIKEY=''):
-# https://api.torn.com/faction/?selections=donations&key=Bge2YspVfryGBRM4
+# https://api.torn.com/faction/?selections=donations&key=
 # structure  {"donations":{"2169463":{"name":"PapaAndreas","money_balance":0,"points_balance":0},"2198942":{"name":"nyudhfcue","money_balance":10000000,"points_balance":0}}}
 
     rb=requests.get('https://api.torn.com/user/?selections=basic&key={api}'.format(api=APIKEY ) ).json()
