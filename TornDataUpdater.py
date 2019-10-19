@@ -297,10 +297,10 @@ def updateDate(wsName,gc,sheetKey,row,column):
     current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     ws.update_cell( row,column,"Last update : " + current_date)
 
-for name in ('Kivou','Kwartz','Cilou','Argozdoc'):
+for name in ('Kivou','Kwartz','Quatuor','Argozdoc'):
     updatePersonalData( name , gc, sheetKey, APIKey_dict )
 
-updateItemPrices( 'Cilou', gc, sheetKey, APIKey_dict )
+updateItemPrices( 'Quatuor', gc, sheetKey, APIKey_dict )
 
 updateDate('UserStats',gc,sheetKey,1,4)
 updateDate('Sets', gc, sheetKey,1,1)

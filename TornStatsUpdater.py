@@ -58,7 +58,6 @@ def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
 #        print('update done: new current row =',current_row)
         return
     
-for name in ('Kwartz','Kivou','Cilou'):
+for name in ('Kwartz','Kivou','Quatuor'):
     updatePersonalStats( name , gc, sheetKey, APIKey_dict )
 
-# updatePersonalStats( 'Kwartz' , gc, sheetKey, APIKey_dict )

@@ -43,7 +43,12 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
         ws.update_cell(1,2,current_row)
         for i in range(len(L_crimes)):
             ws.update_cell(current_row,i+2,int(L_crimes[i]))
-        ws.update_cell(current_row,11,int(p['personalstats']['jailed']))
+        ij = 11
+        ws.update_cell(current_row,ij,int(p['personalstats']['jailed']))
+        ws.update_cell(current_row,ij+1,int(p['personalstats']['peoplebusted']))
+        ws.update_cell(current_row,ij+2,int(p['personalstats']['failedbusts']))
+        ws.update_cell(current_row,ij+3,int(p['personalstats']['peoplebought']))
+        ws.update_cell(current_row,ij+4,int(p['personalstats']['peopleboughtspent']/1000))
 # Write the date
         current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
         ws.update_cell(current_row,1,current_date)
