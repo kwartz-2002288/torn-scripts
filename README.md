@@ -1,2 +1,2 @@
 # torn-scripts
-Various scripts fot torn city online game
+Various scripts fot torn city online game !
