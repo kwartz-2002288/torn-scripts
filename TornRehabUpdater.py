@@ -1,7 +1,7 @@
 import requests, gspread, string, datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
-
+# COUCOU
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
 APIKey_dict,sheetKey_dict = readKeysLib.getDicts()
 repertory=sheetKey_dict['rep']
@@ -19,13 +19,13 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
 # Get data from TORN in r (dictionnary)
         r=requests.get('https://api.torn.com/user/?selections=personalstats&key={api}'.format(api=APIKEY ) ).json()
         x=requests.get('https://api.torn.com/torn/?selections=items&key={api}'.format(api=APIKEY ) ).json()
-        
+
         new_xantaken=r['personalstats']['xantaken']
         new_exttaken=r['personalstats']['exttaken']
 
         xan_market_value=x['items']['206']['market_value']
         ecs_market_value=x['items']['197']['market_value']
-        
+
 # Open the google sheet (don't forget to share it with the gspread mail adress)
 ###   projettorn@appspot.gserviceaccount.com   ###
         ws = gc.open_by_key(sheetKey).worksheet('Drugs{}'.format( name ))
@@ -47,9 +47,8 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
                         ws.update_cell(current_row,4,xan_market_value)
                 else:
                         ws.update_cell(current_row,4,ecs_market_value)
-#                print('update done: new current row =',current_row)   
+#                print('update done: new current row =',current_row)
         return
 
 for name in ('Kwartz','Kivou'):
     updateRehab( name , gc, sheetKey, APIKey_dict)
-
