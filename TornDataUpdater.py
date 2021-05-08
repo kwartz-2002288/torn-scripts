@@ -5,7 +5,7 @@ import string
 import math, datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
-
+# COUCOU
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
 APIKey_dict,sheetKey_dict = readKeysLib.getDicts()
 repertory=sheetKey_dict['rep']
@@ -22,16 +22,16 @@ def updatePersonalData(name, gc, sheetKey, APIKey_dict):
         r    = requests.get( 'https://api.torn.com/user/?selections=basic,profile,jobpoints,bars,networth,crimes,education,profile,cooldowns,travel,personalstats,workstats,battlestats,inventory&key={api}'.format( api=APIKEY ) ).json()
         rbis = requests.get( 'https://api.torn.com/user/?selections=money,icons&key={api}'.format( api=APIKEY ) ).json() # incompatibility with networth
         torn = requests.get( 'https://api.torn.com/torn/?selections=education&key={api}'.format( api=APIKEY ) ).json() # incompatibility with networth
-        
+
 # Open the google sheet (don't forget to share it with the gspread mail adress)
 ###   projettorn@appspot.gserviceaccount.com   ###
         ws = gc.open_by_key(sheetKey).worksheet( 'RawData{}'.format(name) )
-        
+
         cell_list = ws.range( 'A2:B499' )
         for i in range( len( cell_list ) ):
             cell_list[i].value = ''
         ws.update_cells( cell_list )
-        
+
         range_it = 2
         sub_r = r['networth']
         n_row = len(sub_r)
@@ -42,7 +42,7 @@ def updatePersonalData(name, gc, sheetKey, APIKey_dict):
             cell_list[2*i+1].value = sub_r[ key ]
         ws.update_cells( cell_list )
         range_it += n_row+1
-        
+
         sub_r = r['criminalrecord']
         n_row = len(sub_r)
         cell_range = 'A{}:B{}'.format( range_it, range_it+n_row-1 )
@@ -158,7 +158,7 @@ def updatePersonalData(name, gc, sheetKey, APIKey_dict):
             cell_list[2*i+0].value = key
             cell_list[2*i+1].value = sub_r[ key ]
         ws.update_cells( cell_list )
-        range_it += n_row+1	
+        range_it += n_row+1
 
         job = ''
         for icon in r['basicicons']:
@@ -228,7 +228,7 @@ def updatePersonalData(name, gc, sheetKey, APIKey_dict):
             cell_list[2*i+0].value = key
             cell_list[2*i+1].value = valuables[ key ]
         ws.update_cells( cell_list )
-        range_it += n_row+1	
+        range_it += n_row+1
 
 def updateItemPrices(name, gc, sheetKey, APIKey_dict):
         APIKEY = APIKey_dict[name]
@@ -246,7 +246,7 @@ def updateItemPrices(name, gc, sheetKey, APIKey_dict):
                       "11": ("South Africa", 208) }
 
         item_t = requests.get( 'https://api.torn.com/torn/?selections=items&key={api}'.format( api=APIKEY ) ).json()['items']
-        r = [['country', 'travel_time', 'name', 'type', 'buy_price', 'sell_price', 'market_value', 'cost', 'left']]        
+        r = [['country', 'travel_time', 'name', 'type', 'buy_price', 'sell_price', 'market_value', 'cost', 'left']]
         for kc in countries:
             country    = countries[ kc ][0]
             traveltime = countries[ kc ][1]
@@ -254,7 +254,7 @@ def updateItemPrices(name, gc, sheetKey, APIKey_dict):
                 for ki in item_c[ kc ]:
                     a = item_t[ ki ][ "name" ]
                     b = int(kc)
-                    if( ( b == 1  and ( a == "Jaguar Plushie" or a == "Dahlia" ) ) or 
+                    if( ( b == 1  and ( a == "Jaguar Plushie" or a == "Dahlia" ) ) or
                         ( b == 2  and ( a == "Stingray Plushie" or a == "Banana Orchid" ) ) or
                         ( b == 3  and ( a == "Wolverine Plushie" or a == "Crocus" ) ) or
                         ( b == 4  and ( a == "Orchid" ) ) or
@@ -288,11 +288,11 @@ def updateItemPrices(name, gc, sheetKey, APIKey_dict):
         for i in range( n_row ):
             for j in range( n_col ):
                 cell_list[n_col*i+j].value = r[ i ][ j ]
-            
+
         ws.update_cells( cell_list )
-    
+
 def updateDate(wsName,gc,sheetKey,row,column):
-    # write the update date 
+    # write the update date
     ws = gc.open_by_key(sheetKey).worksheet(wsName)
     current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
     ws.update_cell( row,column,"Last update : " + current_date)
@@ -304,5 +304,3 @@ updateItemPrices( 'Quatuor', gc, sheetKey, APIKey_dict )
 
 updateDate('UserStats',gc,sheetKey,1,4)
 updateDate('Sets', gc, sheetKey,1,1)
-
-
