@@ -1,3 +1,6 @@
 __pycache__
 apiKeys.txt
+sheetKeys.txt
+lentStocks.txt
 gspread*.json
+ProjetTORN*.json
