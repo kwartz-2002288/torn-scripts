@@ -21,12 +21,12 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
 # Get data from TORN in r (dictionnary)
     r=requests.get('https://api.torn.com/user/?selections=crimes&key={api}'.format(api=APIKEY ) ).json()
     p=requests.get('https://api.torn.com/user/?selections=personalstats&key={api}'.format(api=APIKEY ) ).json()
-    
+
 # Open the specific worksheet (don't forget to share it with the gspread mail adress)
 ###   projettorn@appspot.gserviceaccount.com   ###
     ws = gc.open_by_key(sheetKey).worksheet('Crimes{}'.format( name ))
 
-# Read crimes names in sheet range 3, columns 2 to 10 
+# Read crimes names in sheet range 3, columns 2 to 10
 # and read their values in torn data r then stock them in L_crimes
     L_crimes=[ ]
     for i in range(2,11):
@@ -54,6 +54,5 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
         ws.update_cell(current_row,1,current_date)
 
 for name in ('Kwartz','Kivou'):
+    print(name)
     updateCrimes( name , gc, sheetKey, APIKey_dict)
-
-
