@@ -5,7 +5,7 @@ import string
 import math, datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
-# COUCOU
+
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
 APIKey_dict,sheetKey_dict = readKeysLib.getDicts()
 repertory=sheetKey_dict['rep']
