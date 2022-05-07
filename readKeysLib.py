@@ -6,9 +6,9 @@ import os,json
 # name2 APIkey2 etc...
 
 nodeName = os.uname().nodename
-if nodeName == 'raspberrypi':
-    repertory = '/home/jpr/Documents/torn/files/' # Rapsberry path
-elif nodeName == 'iMac-JP.local' or nodeName == 'MacBook-JP.local':
+if nodeName == 'raspberrypi' or nodeName == 'acer':
+    repertory = '/home/jpr/Documents/torn/files/' # Rapsberry or acer path
+elif nodeName == 'iMac-JP.local' or 'iMac-JP-2.local' or nodeName == 'MacBook-JP.local':
     repertory = '/Users/jpr/Dropbox/torn/files/' # Mac path
 else:
     raise Exception('Unknown computer')
@@ -20,7 +20,7 @@ def getDicts():
     with open(repertory+'sheetKeys.txt') as f:
         sheetKeys = json.load(f)
     sheetKeys['rep']=repertory
-    return APIKeys, sheetKeys
+    return APIKeys, sheetKeys, nodeName
 
 def getLentStocks():
     " get the lent stocks information "

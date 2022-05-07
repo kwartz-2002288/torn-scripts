@@ -4,13 +4,13 @@ import readKeysLib
 
 pp = pprint.PrettyPrinter(indent=4)
 # API eys, sheet keys and lent stocks are saved in files in an external repertory see the readKeysLib module
-APIKey_dict,sheetKey_dict = readKeysLib.getDicts()
-repertory=sheetKey_dict['rep']
+APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
+repertory = sheetKey_dict['rep']
 lentStock_dict = readKeysLib.getLentStocks()
 
 # Get authorization for gspread
 scope = ['https://spreadsheets.google.com/feeds']
-json_keyfile=repertory+sheetKey_dict['jsonKey']
+json_keyfile = repertory + sheetKey_dict['jsonKey']
 credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, scope)
 gc = gspread.authorize(credentials)
 
@@ -18,9 +18,13 @@ def getFactionDonation( APIKey=''):
 # https://api.torn.com/faction/?selections=donations&key=Bge2YspVfryGBRM4
 # structure  {"donations":{"2169463":{"name":"PapaAndreas","money_balance":0,"points_balance":0},"2198942":{"name":"nyudhfcue","money_balance":10000000,"points_balance":0}}}
     try:
-        rb=requests.get(f'https://api.torn.com/user/?selections=basic&key={APIKey}' ).json()
-        r=requests.get(f'https://api.torn.com/faction/?selections=donations&key={APIKey}' ).json()
-        return r['donations'][str(rb['player_id'])]['money_balance']
+        rb = requests.get(f'https://api.torn.com/user/?selections=basic&key={APIKey}' ).json()
+        r = requests.get(f'https://api.torn.com/faction/?selections=donations&key={APIKey}' ).json()
+        faction_cash = r['donations'][str(rb['player_id'])]['money_balance']
+        if faction_cash < 0:
+            faction_cash = 0
+#        print(str(rb['player_id']),' *** ',cash)
+        return faction_cash
     except KeyError as exception:
         print('Here is the KeyError :', exception)
         print('API key :', APIKey)
@@ -31,13 +35,13 @@ def getNetworth( APIKey=''):
         r=requests.get(f'https://api.torn.com/user/?selections=networth&key={APIKey}').json()
         return r['networth']['total'],r['networth']['stockmarket'],r['networth']['company'],r['networth']['vault']
 
-print("FactionDonation")
-for player_name in ['Kivou','Kwartz']:
-    print(getFactionDonation(APIKey_dict[player_name]))
-print("Dictionnaries")
-pp.pprint(APIKey_dict)
-pp.pprint(sheetKey_dict)
-pp.pprint(lentStock_dict)
+# print("FactionDonation")
+# for player_name in ['Kivou','Kwartz']:
+#     print(getFactionDonation(APIKey_dict[player_name]))
+# print("Dictionnaries")
+# pp.pprint(APIKey_dict)
+# pp.pprint(sheetKey_dict)
+# pp.pprint(lentStock_dict)
 
 ###### COMPUTE AND WRITE EXACT STOCKS STATUS
 sheetKey = sheetKey_dict['TornStats']
@@ -90,11 +94,11 @@ for player_name in ['Kivou','Kwartz']:
 ws.update_cell(1,4,int(total_stocks))
 # Add lent stocks:
 other_stocks = readKeysLib.getLentStocks()
-print(other_stocks)
+#print(other_stocks)
 total_lent = 0
 for stock_id, player_list in other_stocks.items():
-    print("stock_id",stock_id)
-    print("player_list",player_list)
+#    print("stock_id",stock_id)
+#    print("player_list",player_list)
 #    lin+=1; col=1; ws.update_cell(lin,col,player_name)
     acronym = rs["stocks"][stock_id]["acronym"]
     n_shares = rs["stocks"][stock_id]["benefit"]["requirement"]
@@ -142,4 +146,7 @@ ws.update_cell(current_row,5,FactionDonationTotal)
 ws.update_cell(current_row,6,VaultTotal)
 ws.update_cell(current_row,7,int(total_stocks))
 ws.update_cell(current_row,8,int(Real_Networth))
+ws.update_cell(current_row,9,NetworthKwartz/1000000000.)
+ws.update_cell(current_row,10,NetworthKivou/1000000000.)
 ws.update_cell( 1,2,current_row)
+ws.update_cell( 2,2,nodeName)

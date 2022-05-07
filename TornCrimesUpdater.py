@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
-APIKey_dict,sheetKey_dict = readKeysLib.getDicts()
+APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
 repertory=sheetKey_dict['rep']
 
 # Get authorization for gspread
@@ -41,6 +41,7 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
         current_row+=1
 # Update current row, crimes numbers and jailed
         ws.update_cell(1,2,current_row)
+        ws.update_cell(2,1,'Updated by ' + nodeName)
         for i in range(len(L_crimes)):
             ws.update_cell(current_row,i+2,int(L_crimes[i]))
         ij = 11
@@ -54,5 +55,4 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
         ws.update_cell(current_row,1,current_date)
 
 for name in ('Kwartz','Kivou'):
-    print(name)
     updateCrimes( name , gc, sheetKey, APIKey_dict)
