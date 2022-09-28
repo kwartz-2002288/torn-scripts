@@ -30,6 +30,6 @@ def getLentStocks():
 
 def getYATAtargets():
     " get the targets exported by YATA"
-    with open(repertory+'targets.json','r') as f:
+    with open(repertory+'target_list.json','r') as f:
         dict = json.load(f)
     return dict
