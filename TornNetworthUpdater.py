@@ -127,7 +127,7 @@ NetworthNet = NetworthTotal + FactionDonationTotal - StockTotal
 Real_Networth = NetworthNet + total_stocks
 #print(Real_Networth)
 ### ADD Oil Rig Participation:
-Real_Networth += 5.763E9
+Real_Networth += 7.613E9
 
 #TotalArgozdoc = getArgozdocMoney( sheetKey_dict['ArgozVault'] )
 
