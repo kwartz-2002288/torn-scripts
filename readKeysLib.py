@@ -8,7 +8,7 @@ import os,json
 nodeName = os.uname().nodename
 if nodeName == 'raspberrypi' or nodeName == 'acer':
     repertory = '/home/jpr/Documents/torn/files/' # Rapsberry or acer path
-elif nodeName == 'iMac-JP.local' or 'iMac-JP-2.local' or nodeName == 'MacBook-JP.local':
+elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
     repertory = '/Users/jpr/Dropbox/torn/files/' # Mac path
 else:
     raise Exception('Unknown computer')
@@ -22,14 +22,14 @@ def getDicts():
     sheetKeys['rep']=repertory
     return APIKeys, sheetKeys, nodeName
 
-def getLentStocks():
-    " get the lent stocks information "
-    with open(repertory+'lentStocks.txt','r') as f:
-        dict = json.load(f)
-    return dict
-
 def getYATAtargets():
     " get the targets exported by YATA"
     with open(repertory+'target_list.json','r') as f:
         dict = json.load(f)
     return dict
+
+# def getLentStocks():
+#     " get the lent stocks information "
+#     with open(repertory+'lentStocks.txt','r') as f:
+#         dict = json.load(f)
+#     return dict

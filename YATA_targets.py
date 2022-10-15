@@ -25,7 +25,6 @@ print('-> sheet opened')
 # ws.update_cell(11,1,currentDateGspread+0.5)
 # previousDateGspreadStr = ws.cell(12,1).value
 
-
 # Lecture du fichier
 targets_dict = readKeysLib.getYATAtargets()
 print(f'-> {len(targets_dict)} targets found')
