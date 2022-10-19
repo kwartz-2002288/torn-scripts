@@ -62,12 +62,10 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
 
         busts_per_day = (new_busts - old_busts) / delta_days
         crimes_per_day = (new_total - old_crimes) / delta_days
-
-        L_crimes = [current_date] + L_crimes + [busts_per_day, crimes_per_day]
-
-        zone_to_be_filled = "A" + str(current_row) + ":Q" + str(current_row)
+        L_crimes += [busts_per_day, crimes_per_day]
+        zone_to_be_filled = "B" + str(current_row) + ":Q" + str(current_row)
         ws.update(zone_to_be_filled, [L_crimes])
-
+        ws.update_cell(current_row,1,current_date)
         ws.update_cell(1,2,current_row)
         ws.update_cell(2,1,'Updated by ' + nodeName)
 

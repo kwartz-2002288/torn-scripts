@@ -98,9 +98,10 @@ old_NW_1 = ws.acell("H" + str(current_row - 1)).value
 old_NW_1 = int(''.join(old_NW_1.split()))
 Delta = int(RealNetworth  - old_NW_1)
 
-L = [[current_date, NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal, RealStocks, RealNetworth, NetworthKwartz/1000000000., NetworthKivou/1000000000., Cash, Delta, Delta_averaged]]
-zone_to_be_filled = "A" + str(current_row) + ":M" + str(current_row)
+L = [[NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal, RealStocks, RealNetworth, NetworthKwartz/1000000000., NetworthKivou/1000000000., Cash, Delta, Delta_averaged]]
+zone_to_be_filled = "B" + str(current_row) + ":M" + str(current_row)
 ws.update(zone_to_be_filled, L)
 
 ws.update_cell(1,2,current_row)
 ws.update_cell(2,2,nodeName)
+ws.update_cell(current_row,1,current_date)

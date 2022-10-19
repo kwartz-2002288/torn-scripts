@@ -25,19 +25,19 @@ def updateSpecialGym ( name , gc, sheetKey, APIKey_dict, therow ):
 
 # Get stats, convert in millions and update sheet
 
-        thecol = 1
-        ws.update_cell(therow,thecol,name)
-        thename=['dexterity','defense','speed','strength']
-        for i in range(0,4):
-                thecol += 1
-                stat_int = int(float(r[thename[i]]))
-                ws.update_cell(therow,thecol,stat_int)
+
+        L = [name]
+        thestat=['dexterity','defense','speed','strength']
+        for thestat in ['dexterity','defense','speed','strength']:
+                L.append(int(float(r[thestat])))
+        zone_to_be_filled = "A" + therow + ":E" + therow
+        ws.update(zone_to_be_filled, [L])
         return
 
-updateSpecialGym( "Kivou" , gc, sheetKey, APIKey_dict, 1)
-updateSpecialGym( "Kwartz" , gc, sheetKey, APIKey_dict, 2)
+updateSpecialGym( "Kivou" , gc, sheetKey, APIKey_dict, "1")
+updateSpecialGym( "Kwartz" , gc, sheetKey, APIKey_dict, "2")
 # Write the date
 ws = gc.open_by_key(sheetKey).worksheet('Gym')
-current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-ws.update_cell(3, 1, "Updated by : " + nodeName)
+current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+ws.update_cell(3, 1, "Updated by " + nodeName)
 ws.update_cell(3, 2, current_date)
