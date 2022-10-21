@@ -1,4 +1,5 @@
-import requests, gspread, string, datetime
+import requests, gspread, string
+from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
@@ -16,55 +17,66 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, sco
 gc = gspread.authorize(credentials)
 sheetKey = sheetKey_dict['TornStats']
 
+def old_value(ws, column, current_row, N):
+    v = ws.acell(column + str(current_row - N)).value
+    return int(''.join(v.split())) # remove spaces
+
+def delta_t(ws, current_row, N):
+    d = ws.cell(str(current_row - N),1).value
+    dt = datetime.strptime(d, '%d/%m/%Y %H:%M:%S') # convert to datetime
+    return (datetime.now() - dt).days # use deltatime object
+
+def delta_N(ws, new, column, current_row, N):
+    return (new - old_value(ws, column, current_row, N))/delta_t(ws, current_row, N)
+
 def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
     APIKEY = APIKey_dict[name]
 
 # Get data from TORN in r (dictionnary)
-    r=requests.get('https://api.torn.com/user/?selections=battlestats,workstats&key={api}'.format( api=APIKEY ) ).json()
+    r=requests.get(f'https://api.torn.com/user/?selections=personalstats&key={APIKEY}').json()["personalstats"]
 
 # Open the google sheet (don't forget to share it with the gspread mail adress)
 ###   projettorn@appspot.gserviceaccount.com   ###
-    ws = gc.open_by_key(sheetKey).worksheet('Stats{}'.format( name ))
+    ws = gc.open_by_key(sheetKey).worksheet(f'Stats{name}')
+# NEW version
+    current_row = ws.cell(1,2).value # last row that has already been written
+    current_row = int(''.join(current_row.split())) #clean string and convert to int
 
+    names_col = ["totalstats", "dexterity", "strength", "defense", "speed", "manuallabor", "intelligence", "endurance", "totalworkingstats"]
 # Read stats names in sheet range 2, columns 3 to 9
 # and read their values in torn data r then stock them in L_stats
-    L_stats=[]
-    for i in range(3,10):
-        name_col = ws.cell(2,i).value
-        if isinstance(r[name_col],str):
-            L_stats.append(float(r[name_col].replace(',','')))
-        else:
-            L_stats.append(float(r[name_col]))
-    old_row = int(ws.cell(1,2).value.replace(' ',''))
-    current_row = old_row +1 # row where we will write new data
+    L_stats = [r[name_col] for name_col in names_col]
+    # print(L_stats)
 
-# Update the google sheet
-    for i in range(len(L_stats)):
-        ws.update_cell(current_row,i+3,int(L_stats[i]))
-# Sum the stats and update
-    tot_stats=0
-    for i in range(4):
-        tot_stats+=L_stats[i]
-    ws.update_cell(current_row,2,int(tot_stats))
-# Calculate and update daily stat increment
-        #if (current_row > 3) :
-                #previous_tot_stats=int(ws.cell(current_row-1,2).value)
-                #increment_averaged=int((tot_stats-previous_tot_stats))
-                #ws.update_cell( current_row,11,increment_averaged)
-# Calculate and update daily stat increment averaged on nd days
-        #nd = 7
-        #if (current_row-nd > 2) :
-                #previous_tot_stats=int(ws.cell(current_row-nd,2).value)
-                #increment_averaged=int((tot_stats-previous_tot_stats)/nd)
-                #ws.update_cell( current_row,10,increment_averaged)
-# Write the date and update current_row # modif Manu
-        # current_date = ws.cell(1,4).value
-    current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    ws.update_cell( current_row,1,current_date)
-    ws.update_cell( 1,2,current_row)
-    ws.update_cell( 2,1,"updated by " + nodeName)
-#        print('update done: new current row =',current_row)
-    return
+    # Compute evolutions on averaged rows
+    new_total_stats = r["totalstats"]
+    new_total_job = r["totalworkingstats"]
+    current_row += 1
+    current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
+    old_total_1 = old_value(ws, "B", current_row, 1)
+    old_total_job_1 = old_value(ws, "M", current_row, 1)
+
+    delta_1 = new_total_stats - old_total_1
+    delta_job_1 = new_total_job - old_total_job_1
+    delta_10 = delta_N(ws, new_total_stats, "B", current_row, 10)
+    delta_365 = delta_N(ws, new_total_stats, "B", current_row, 365)
+    delta_job_50 = delta_N(ws, new_total_job, "M", current_row, 365)
+    # print(delta_1, delta_10, delta_365)
+    # print(delta_job_1, delta_job_50)
+    L_zone = L_stats[0:5] + [delta_1, delta_10, delta_365/1000000] + L_stats[5:9] + [delta_job_1, delta_job_50]
+    zone_to_be_filled = "B" + str(current_row) + ":O" + str(current_row)
+    ws.update(zone_to_be_filled, [L_zone])
+    ws.update_cell(current_row,1,current_date)
+    ws.update_cell(1,2,current_row)
+    ws.update_cell(2,1,'Updated by ' + nodeName)
+    return new_total_stats
+
+L = []
 for name in ('Kwartz','Kivou','Quatuor'):
-    updatePersonalStats( name , gc, sheetKey, APIKey_dict )
+    L.append(updatePersonalStats(name , gc, sheetKey, APIKey_dict))
+delta = L[0] - L[1]
+ws = gc.open_by_key(sheetKey).worksheet('StatsKwartz')
+current_row = ws.cell(1,2).value # last row that has already been written
+current_row = int(''.join(current_row.split())) #clean string and convert to int
+ws.update('P'+ str(current_row), delta)
