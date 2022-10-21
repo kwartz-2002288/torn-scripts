@@ -29,7 +29,8 @@ def updateCrimes(name, gc, sheetKey, APIKey_dict):
 
 # Read crimes names in sheet range 3, columns 2 to 10
 # and read their values in torn data r then stock them in L_crimes
-    current_row = int(ws.cell(1,2).value) # last row that has already been written
+    current_row = ws.cell(1,2).value # last row that has already been written
+    current_row = int(''.join(current_row.split()))
     names_col = ws.row_values(3)[1:10]
     L_crimes=[r['criminalrecord'][name_col] for name_col in names_col]
 
