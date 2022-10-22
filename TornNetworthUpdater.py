@@ -23,7 +23,6 @@ def getFactionDonation(APIKey=''):
         faction_cash = r['donations'][str(rb['player_id'])]['money_balance']
         if faction_cash < 0:
             faction_cash = 0
-#        print(str(rb['player_id']),' *** ',cash)
         return faction_cash
     except KeyError as exception:
         print('Here is the KeyError :', exception)
@@ -59,15 +58,11 @@ Cash = VaultTotal + FactionDonationTotal
 
 LentStocks = {}
 row = 4
-test = True
-while test:
-    stock_id = ws_NW_data.cell(row,1).value # type str
-    if int(stock_id) > 0:
-        LentStocks[stock_id] = int(ws_NW_data.cell(row,2).value)
-        row += 1
-        print(stock_id, LentStocks[stock_id])
-    else:
-        test = False
+stock_id = ws_NW_data.cell(row,1).value
+while int(stock_id): # stop reading at first 0 in column "A"
+    LentStocks[stock_id] = int(ws_NW_data.cell(row,2).value)
+    row += 1
+    stock_id = ws_NW_data.cell(row,1).value
 
 # Compute lent stocks value
 rs=requests.get(f'https://api.torn.com/torn/?selections=stocks&key={APIKey_dict["Kivou"]}').json()
