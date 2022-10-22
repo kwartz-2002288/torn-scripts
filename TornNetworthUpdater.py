@@ -58,10 +58,16 @@ Cash = VaultTotal + FactionDonationTotal
 # Read lent stock information from NW_Data sheet in a dictionnary
 
 LentStocks = {}
-for i in range(4,6):
-    stock_id = ws_NW_data.cell(i,1).value # type str
+row = 4
+test = True
+while test:
+    stock_id = ws_NW_data.cell(row,1).value # type str
     if int(stock_id) > 0:
-        LentStocks[stock_id] = int(ws_NW_data.cell(i,2).value)
+        LentStocks[stock_id] = int(ws_NW_data.cell(row,2).value)
+        row += 1
+        print(stock_id, LentStocks[stock_id])
+    else:
+        test = False
 
 # Compute lent stocks value
 rs=requests.get(f'https://api.torn.com/torn/?selections=stocks&key={APIKey_dict["Kivou"]}').json()
