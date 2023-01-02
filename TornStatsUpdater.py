@@ -68,7 +68,7 @@ def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
     zone_to_be_filled = "B" + str(current_row) + ":O" + str(current_row)
     ws.update(zone_to_be_filled, [L_zone])
     ws.update_cell(current_row,1,current_date)
-    ws.update_cell(1,2,current_row)
+    # ws.update_cell(1,2,current_row) # current row evaluated in spreadsheet now!
     ws.update_cell(2,1,'Updated by ' + nodeName)
     return new_total_stats
 
