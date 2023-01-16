@@ -34,14 +34,54 @@ def getNetworth(APIKey=''):
         r=requests.get(f'https://api.torn.com/user/?selections=networth&key={APIKey}').json()
         return r['networth']['total'],r['networth']['stockmarket'],r['networth']['company'],r['networth']['vault']
 
+def getRacket(APIKey=''):
+    r = requests.get(f'https://api.torn.com/torn/?selections=rackets&key={APIKey}').json()
+    return r["rackets"]
+
+def racket_evolution(APIKey=''):
+    # racket evolution
+    ws_R = gc.open_by_key(sheetKey).worksheet('R')
+    old_row = int(ws_R.cell(1,2).value) # row where we will write new data
+    current_row = old_row + 1
+    territoryName = ws_NW_data.acell("D1").value
+
+    racket_dict = getRacket(APIKey)
+    if territoryName in racket_dict:
+        old_level = int(ws_R.acell("C" + str(old_row)).value)
+        new_level = int(racket_dict[territoryName]["level"])
+        if old_level != new_level: # racket level has changed
+            faction_ID = racket_dict[territoryName]["faction"]
+            faction_name = requests.get(
+                    f"https://api.torn.com/faction/{str(faction_ID)}\
+                    ?selections=&key={APIKey}").json()["name"]
+            racket_name = racket_dict[territoryName]["name"]
+            reward = racket_dict[territoryName]["reward"]
+            L = [[current_date, racket_name, new_level, reward, faction_name]]
+            zone_to_be_filled = "A" + str(current_row) + ":E" + str(current_row)
+            ws_R.update(zone_to_be_filled, L)
+            ws_R.update_cell(1,2,current_row)
+            ws_R.update_cell(2,2,nodeName)
+        else:
+            ws_R.update_cell(old_row,1,current_date)
+            ws_R.update_cell(2,2,nodeName)
+    else:
+        L = [[current_date, "THE END :("]]
+        zone_to_be_filled = "A" + str(current_row) + ":B" + str(current_row)
+        ws_R.update(zone_to_be_filled, L)
+        ws_R.update_cell(2,2,nodeName)
 
 # Open Tornstats sheets for NW update
 sheetKey = sheetKey_dict['TornStats']
 ws = gc.open_by_key(sheetKey).worksheet('NW')
 ws_NW_data = gc.open_by_key(sheetKey).worksheet('NW_data')
+current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+# New feature, racket evolution
+racket_evolution(APIKey_dict['Kwartz'])
 
 # Get our networth informations and combine.
-FactionDonationTotal = getFactionDonation( APIKey_dict['Kivou'] ) + getFactionDonation( APIKey_dict['Kwartz'] )
+FactionDonationTotal = (getFactionDonation( APIKey_dict['Kivou'] ) +
+                            getFactionDonation( APIKey_dict['Kwartz'] ) )
 NetworthKivou,StockKivou,CompanyKivou,VaultKivou = getNetworth( APIKey_dict['Kivou'] )
 NetworthKwartz,StockKwartz,CompanyKwartz,VaultKwartz = getNetworth( APIKey_dict['Kwartz'] )
 NetworthTotal = NetworthKivou + NetworthKwartz
@@ -52,8 +92,6 @@ VaultTotal = VaultKivou + VaultKwartz
 Cash = VaultTotal + FactionDonationTotal
 
 ###### Add lent stocks and other investments
-
-
 # Read lent stock information from NW_Data sheet in a dictionnary
 
 LentStocks = {}
