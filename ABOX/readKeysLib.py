@@ -1,4 +1,4 @@
-import os, json
+import os,json
 
 # create an APIkey dictionnary {user:APIkey, ... }
 # from a textfile data

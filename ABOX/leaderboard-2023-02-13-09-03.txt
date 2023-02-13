@@ -1,0 +1,143 @@
+All contests started at 2023-02-12 17:52:26+00:00
+Leaderboard analysis at 2023/02/13 09:03:34 UTC
+
+*** contest : peoplebusted
+rank;name;delta_peoplebusted
+1;Schnitzel;6
+2;Joarib;4
+3;KiLLaFiSh;4
+4;Betrayer;3
+5;quatuorlapache;3
+6;Argozdoc;3
+7;MisterLego;2
+8;h4xnoodle;2
+9;GuruSteve;2
+10;PluckyHero;2
+11;kwartz;1
+12;SpudBossman;1
+13;Slaterz;1
+14;variaxshev;1
+15;Mummo;1
+16;Alnuza;1
+
+peoplebusted faction total = 37
+
+*** contest : overdosed
+rank;name;delta_overdosed
+1;Coconsy;1
+2;Slaterz;1
+3;TugBoatTimm;1
+4;mugsyourvagene;1
+
+overdosed faction total = 4
+
+*** contest : xantaken
+rank;name;delta_xantaken
+1;ashby;2
+2;RogueShark21;2
+3;2000;2
+4;Drazer;2
+5;Betrayer;2
+6;kwartz;2
+7;bannof47;2
+8;SpudBossman;2
+9;ToobZWolf;2
+10;h4xnoodle;2
+11;Rahmses;2
+12;smaaen;2
+13;Funweezy;2
+14;TugBoatTimm;2
+15;GuruSteve;2
+16;IndyCision;2
+17;Phil013;2
+18;Mummo;2
+19;Cromex;2
+20;Firelord_Zuko;2
+21;Malignant;2
+22;DaN1eL;2
+23;PluckyHero;2
+24;Coconsy;1
+25;berg;1
+26;Travis-;1
+27;937John_S;1
+28;Schnitzel;1
+29;SolidSnakee;1
+30;Triceps;1
+31;Kivou;1
+32;Klemenso;1
+33;MisterLego;1
+34;Richk24;1
+35;Argozdoc;1
+36;RainingTaco;1
+37;Manuito;1
+38;HectorBerlioz;1
+39;DungeonMaster;1
+40;vgsdaer;1
+41;NoEvras;1
+42;-LeGenDr4GoN-;1
+43;AK_Union47;1
+44;Charlesthehard;1
+45;Slaterz;1
+46;variaxshev;1
+47;CYBERDOG321;1
+48;Matoros;1
+49;VanHorn;1
+50;KiLLaFiSh;1
+51;Nightslyer;1
+52;moonlife;1
+53;Rainy63;1
+54;mugsyourvagene;1
+
+xantaken faction total = 77
+
+*** contest : cantaken
+rank;name;delta_cantaken
+1;MazingerZ;1
+2;Joarib;1
+
+cantaken faction total = 2
+
+*** contest : fraud_crimes
+rank;name;delta_fraud_crimes
+1;Funweezy;31
+2;NoEvras;29
+3;kwartz;27
+4;ToobZWolf;24
+5;variaxshev;22
+6;Alnuza;22
+7;MisterLego;21
+8;RogueShark21;20
+9;p_D;20
+10;Klemenso;20
+11;PluckyHero;18
+12;TugBoatTimm;17
+13;Manuito;16
+14;smaaen;15
+15;ashby;14
+16;Phil013;14
+17;Kivou;13
+18;Constantin6;13
+19;nomii;12
+20;kelekotyaficko;12
+21;Rainy63;11
+22;Goat;11
+23;Mojodongo;9
+24;Penny1;9
+25;Eperi;8
+26;Coconsy;7
+27;Richk24;6
+28;mugsyourvagene;6
+29;MrDotC;4
+30;Firelord_Zuko;4
+31;Cenia;3
+32;Betrayer;2
+33;Mumodip;2
+34;Davell;1
+35;Matoros;1
+
+fraud_crimes faction total = 464
+
+*** contest : revives
+rank;name;delta_revives
+
+revives faction total = 0
