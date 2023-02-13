@@ -1,0 +1,151 @@
+All contests started at 2023-02-13 10:44:14.206812+00:00
+Leaderboard analysis at 2023/02/13 20:03:49 UTC
+
+*** contest : peoplebusted
+rank;name;delta_peoplebusted
+1;Argozdoc;3
+2;variaxshev;2
+3;Joarib;1
+4;Schnitzel;1
+5;MisterLego;1
+
+peoplebusted faction total = 8
+
+*** contest : overdosed
+rank;name;delta_overdosed
+1;MisterLego;1
+2;HectorBerlioz;1
+
+overdosed faction total = 2
+
+*** contest : xantaken
+rank;name;delta_xantaken
+1;adamhere;2
+2;SpudBossman;2
+3;HectorBerlioz;2
+4;-LeGenDr4GoN-;2
+5;Matoros;2
+6;KiLLaFiSh;2
+7;GuruSteve;2
+8;Firelord_Zuko;2
+9;ashby;1
+10;MazingerZ;1
+11;2000;1
+12;Drakkus;1
+13;berg;1
+14;Travis-;1
+15;937John_S;1
+16;Schnitzel;1
+17;SolidSnakee;1
+18;Kivou;1
+19;kwartz;1
+20;tabassboulba;1
+21;bannof47;1
+22;MisterLego;1
+23;quatuorlapache;1
+24;Argozdoc;1
+25;Stigandr;1
+26;Manuito;1
+27;h4xnoodle;1
+28;Rahmses;1
+29;DungeonMaster;1
+30;Penny1;1
+31;NoEvras;1
+32;Davell;1
+33;smaaen;1
+34;AK_Union47;1
+35;variaxshev;1
+36;CYBERDOG321;1
+37;Funweezy;1
+38;Nightslyer;1
+39;IndyCision;1
+40;Phil013;1
+41;Mummo;1
+42;Cromex;1
+43;Rainy63;1
+44;Malignant;1
+45;DaN1eL;1
+46;Eperi;1
+47;PluckyHero;1
+48;Peperutka;1
+49;FearOfDarkness;1
+
+xantaken faction total = 57
+
+*** contest : cantaken
+rank;name;delta_cantaken
+
+cantaken faction total = 0
+
+*** contest : fraud_crimes
+rank;name;delta_fraud_crimes
+1;p_D;14
+2;Penny1;14
+3;kwartz;13
+4;NoEvras;13
+5;Coconsy;12
+6;smaaen;12
+7;Alnuza;11
+8;Kivou;10
+9;variaxshev;10
+10;Eperi;10
+11;Constantin6;9
+12;MazingerZ;8
+13;Drakkus;8
+14;Klemenso;8
+15;ToobZWolf;8
+16;ashby;7
+17;SolidSnakee;7
+18;MisterLego;7
+19;Funweezy;7
+20;Phil013;7
+21;Goat;7
+22;PluckyHero;7
+23;Manuito;6
+24;Rainy63;6
+25;Cenia;6
+26;Richk24;5
+27;Mojodongo;5
+28;nomii;5
+29;kelekotyaficko;4
+30;TugBoatTimm;3
+31;MrDotC;2
+32;Drazer;1
+33;PapaAndreas;1
+34;Yammer;1
+
+fraud_crimes faction total = 254
+
+*** contest : revives
+rank;name;delta_revives
+1;kwartz;98
+2;4n4rchist;69
+3;Firelord_Zuko;41
+4;quatuorlapache;31
+5;Penny1;25
+6;IndyCision;23
+7;Rahmses;20
+8;CYBERDOG321;19
+9;MazingerZ;18
+10;GuruSteve;18
+11;Funweezy;17
+12;collectinMYloot;16
+13;adamhere;16
+14;Davell;15
+15;smaaen;15
+16;Charlesthehard;15
+17;tabassboulba;14
+18;Coconsy;13
+19;Stigandr;13
+20;Kapaciarz;12
+21;-LeGenDr4GoN-;12
+22;Betrayer;11
+23;VanHorn;9
+24;Joarib;8
+25;TugBoatTimm;5
+26;Cromex;5
+27;Argozdoc;2
+28;Slaterz;2
+29;Mojodongo;1
+
+revives faction total = 563

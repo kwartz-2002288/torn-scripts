@@ -60,7 +60,6 @@ def dump_selected_data(members, file_name, APIKEY):
     # L = ["name", "level", "position", "days_in_faction", "fraud_crimes",
     #      "xantaken", "peoplebusted", "overdosed", "revives", "rankedwarhits", "territoryclears"]
     data_requested = {}
-    print("*** Reading players data")
     i = 0
     for id in members.keys():
         r = requests.get(f"https://api.torn.com/user/{id}?selections=crimes,personalstats&key={APIKEY}").json()
@@ -68,10 +67,8 @@ def dump_selected_data(members, file_name, APIKEY):
         i += 1
         print(i, members[id]["name"])
     data_dict = {}
-    i = 0
     for id, v in members.items():
         i += 1
-        print('***', i, members[id]["name"])
         data_dict[id] = {"name":v["name"],
                          "level":v["level"],
                          "position":v["position"],
@@ -160,7 +157,7 @@ def competition_analysis(initial_datafile_name, new_datafile_name,initial_member
     # get competition start time using initial data file
     stat = os.stat(initial_datafile_name)
     print(f"file {initial_datafile_name} os.stat: {stat}")
-    c_timestamp = stat.st_birthtime # to be changed in Linux ???
+    c_timestamp = stat.st_ctime # to be changed in Linux ???
     c_time = datetime.fromtimestamp(c_timestamp, timezone.utc)
     start_date = c_time.strftime('%Y/%m/%d %H:%M:%S') + ' UTC'
     ws_score.update_cell(1, 6, "Competition started on")
@@ -206,11 +203,11 @@ def competition_start(initial_datafile_name, initial_membersfile_name,
 def initialisation():
     # get API keys and sheet key. get computer name
     APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
-    repertory=sheetKey_dict['rep']
-    APIKEY = APIKey_dict["HectorBerlioz"]
+    repertory = sheetKey_dict['rep']
+    APIKEY = APIKey_dict["Argozdoc"]
     # Get authorization for gspread
     scope = ['https://spreadsheets.google.com/feeds']
-    json_keyfile=repertory+sheetKey_dict['jsonKey']
+    json_keyfile = repertory + sheetKey_dict['jsonKey']
     credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, scope)
     gc = gspread.authorize(credentials)
     # Open the google sheet (don't forget to share it with the gspread mail adress)
@@ -228,7 +225,7 @@ def initialisation():
     request_date_s = request_date.strftime('%Y/%m/%d %H:%M:%S') + ' UTC'
     print(f"Script starts at : {request_date_s}")
 
-    path = repertory + "ABOX/"
+    path = sheetKey_dict['path']
     initial_datafile_name = path + "D0.json"
     initial_membersfile_name = path + "members_initial.json"
     new_datafile_name = path + "D1.json"

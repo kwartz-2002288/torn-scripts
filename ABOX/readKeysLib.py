@@ -8,8 +8,10 @@ import os,json
 nodeName = os.uname().nodename
 if nodeName == 'raspberrypi' or nodeName == 'acer':
     repertory = '/home/jpr/Documents/torn/files/' # Rapsberry or acer path
+    path = "/home/jpr/torn-scripts/ABOX/"
 elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
     repertory = '/Users/jpr/Dropbox/torn/files/' # Mac path
+    path = "/Users/jpr/torn-scripts/ABOX/"
 else:
     raise Exception('Unknown computer')
 
@@ -20,6 +22,7 @@ def getDicts():
     with open(repertory+'sheetKeys.txt') as f:
         sheetKeys = json.load(f)
     sheetKeys['rep']=repertory
+    sheetKeys['path'] = path
     return APIKeys, sheetKeys, nodeName
 
 def getYATAtargets():
