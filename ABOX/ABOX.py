@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
 
-def time_refs(APIKEY):
+def time_refs(APIKEY): # not used now
     start_date = datetime.now(timezone.utc)
     print(f"script starts at : {start_date.strftime('%Y/%m/%d %H:%M:%S')} UTC")
     r=requests.get(f"https://api.torn.com/user/?selections=timestamp&key={APIKEY}").json()
@@ -65,7 +65,8 @@ def dump_selected_data(members, file_name, APIKEY):
         r = requests.get(f"https://api.torn.com/user/{id}?selections=crimes,personalstats&key={APIKEY}").json()
         data_requested[id] = r
         i += 1
-        print(i, members[id]["name"])
+        if PRINT_LEVEL > 1:
+            print(i, members[id]["name"])
     data_dict = {}
     for id, v in members.items():
         i += 1
@@ -116,10 +117,13 @@ def get_score(file0, file1, members_f0, members_f1, res_file, key_name_list,
                                       json.load(fm0), json.load(fm1))
         column_key = 0
         for key_name in key_name_list:
-            res_file.write(f"\n*** contest : {key_name}\n")
-            res_file.write(f"rank;name;delta_{key_name}\n")
-            print(f"\n*** contest : {key_name}")
-            print(f"rank;name;delta_{key_name}")
+            if RES_FILE:
+                res_file.write(f"\n*** contest : {key_name}\n")
+                res_file.write(f"rank;name;delta_{key_name}\n")
+            if PRINT_LEVEL > 0:
+                print(f"\n*** contest : {key_name}")
+            if PRINT_LEVEL > 1:
+                print(f"rank;name;delta_{key_name}")
             scores = [["rank","name",key_name]]
             result_dict = {}
             total = 0
@@ -133,49 +137,62 @@ def get_score(file0, file1, members_f0, members_f1, res_file, key_name_list,
             for id, v in sorted(result_dict.items(),
                                 key=lambda x: x[1], reverse = True)[0:n_rank]:
                 rank += 1
-                res_file.write(f"{rank};{members1[id]['name']};{result_dict[id]}\n")
-                print(f"{rank:>2};{members1[id]['name']:^20};{result_dict[id]:>4}")
+                if RES_FILE:
+                    res_file.write(f"{rank};{members1[id]['name']};{result_dict[id]}\n")
+                if PRINT_LEVEL > 1:
+                    print(f"{rank:>2};{members1[id]['name']:^20};{result_dict[id]:>4}")
                 scores.append([rank,members1[id]['name'],result_dict[id]])
-            res_file.write(f"\n{key_name} faction total = {total}\n")
-            print(f"\n{key_name} faction total = {total}")
+            if RES_FILE:
+                res_file.write(f"\n{key_name} faction total = {total}\n")
+            if PRINT_LEVEL > 0:
+                print(f"\n{key_name} faction total = {total}")
             ex_aequo(scores)
             scores.insert(0,[" ","faction total", total])
             write_gspread_score(scores, request_date_s, ws_score, nodeName, column_key)
             column_key += 1
-        for id in members1:
-            if id not in members0:
-                res_file.write(f"\nWARNING {members1[id]['name']} was not in faction when the competition started")
-        for id in members0:
-            if id not in members1:
-                res_file.write(f"\nWARNING {members0[id]['name']} is no more in faction")
+        if RES_FILE:
+            for id in members1:
+                if id not in members0:
+                    res_file.write(f"\nWARNING {members1[id]['name']} was not in faction when the competition started")
+            for id in members0:
+                if id not in members1:
+                    res_file.write(f"\nWARNING {members0[id]['name']} is no more in faction")
 
 def competition_analysis(initial_datafile_name, new_datafile_name,initial_membersfile_name,
                     new_membersfile_name, res_file_name, request_date_s,
                     APIKEY, ws_D1, ws_score, nodeName):
-# create new results file
-    res_file = open(res_file_name, 'w')
+
     # get competition start time using initial data file
     stat = os.stat(initial_datafile_name)
-    print(f"file {initial_datafile_name} os.stat: {stat}")
-    c_timestamp = stat.st_ctime # to be changed in Linux ???
+    c_timestamp = stat.st_ctime
     c_time = datetime.fromtimestamp(c_timestamp, timezone.utc)
     start_date = c_time.strftime('%Y/%m/%d %H:%M:%S') + ' UTC'
     ws_score.update_cell(1, 6, "Competition started on")
     ws_score.update_cell(2, 6, start_date)
-    print(f"All contests started at {c_time}")
-    res_file.write(f"All contests started at {c_time}\n")
-    print(f"leaderboard analysis at {request_date_s}")
-    res_file.write(f"Leaderboard analysis at {request_date_s}\n")
+    # create new results file
+    if RES_FILE:
+        res_file = open(res_file_name, 'w')
+        res_file.write(f"All contests started at {c_time}\n")
+        res_file.write(f"Leaderboard analysis at {request_date_s}\n")
+    else:
+        res_file = None
     # collect members
     members = get_members(APIKEY)
     n_rank = len(members)
-    print(f"\nFaction has currently {n_rank} members\n")
     dump_members(members, new_membersfile_name)
 
-# collect and save new data
+    if PRINT_LEVEL > 1:
+        print(f"file {initial_datafile_name} os.stat: {stat}")
+    if PRINT_LEVEL > 0:
+        print(f"All contests started at {c_time}")
+        print(f"leaderboard analysis at {request_date_s}")
+        print(f"\nFaction has currently {n_rank} members\n")
+
 # For debugging purpose (not to have to read API data again and again
 #    with open(new_datafile_name, 'r', encoding='utf-8') as f:
 #        data_dict = json.load(f)
+
+# collect and save new data
     data_dict = dump_selected_data(members, new_datafile_name, APIKEY)
 
     # write data on spreadsheet
@@ -185,15 +202,18 @@ def competition_analysis(initial_datafile_name, new_datafile_name,initial_member
             initial_membersfile_name, new_membersfile_name, res_file,
            ["peoplebusted", "overdosed", "xantaken", "cantaken", "fraud_crimes", "revives"],
            request_date_s, ws_score, nodeName, n_rank)
-    res_file.close()
+    if RES_FILE:
+        res_file.close()
 
 def competition_start(initial_datafile_name, initial_membersfile_name,
                         request_date_s, APIKEY, ws_D0, nodeName):
-    print(f"All contests started at {request_date_s}")
+    if PRINT_LEVEL > 0:
+        print(f"All contests started at {request_date_s}")
     # collect members
     members = get_members(APIKEY)
     n_rank = len(members)
-    print(f"\nFaction has currently {n_rank} members\n")
+    if PRINT_LEVEL > 0:
+        print(f"\nFaction has currently {n_rank} members\n")
     dump_members(members, initial_membersfile_name)
     # collect and save initial data
     data_dict = dump_selected_data(members, initial_datafile_name, APIKEY)
@@ -204,7 +224,7 @@ def initialisation():
     # get API keys and sheet key. get computer name
     APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
     repertory = sheetKey_dict['rep']
-    APIKEY = APIKey_dict["Argozdoc"]
+    APIKEY = APIKey_dict["HectorBerlioz"]
     # Get authorization for gspread
     scope = ['https://spreadsheets.google.com/feeds']
     json_keyfile = repertory + sheetKey_dict['jsonKey']
@@ -223,7 +243,8 @@ def initialisation():
     #timestamp, request_date = time_refs(APIKEY)
     request_date_f = request_date.strftime('%Y-%m-%d-%H-%M')
     request_date_s = request_date.strftime('%Y/%m/%d %H:%M:%S') + ' UTC'
-    print(f"Script starts at : {request_date_s}")
+    if PRINT_LEVEL > 0:
+        print(f"Script starts at : {request_date_s}")
 
     path = sheetKey_dict['path']
     initial_datafile_name = path + "D0.json"
@@ -235,15 +256,20 @@ def initialisation():
     # test if competition is starting (existence of D0.json file)
     try:
         with open(initial_datafile_name, "r", encoding='utf-8') as f0:
-            print(f"Initial file {initial_datafile_name} exists !")
+            if PRINT_LEVEL > 0:
+                print(f"Initial file {initial_datafile_name} exists !")
             competition_analysis(
                 initial_datafile_name, new_datafile_name,
                 initial_membersfile_name, new_membersfile_name,
                 res_file_name, request_date_s, APIKEY, ws_D1, ws_score, nodeName)
 
     except FileNotFoundError:
-        print(f"Starting new competition: creating {initial_datafile_name} file" )
+        if PRINT_LEVEL > 0:
+            print(f"Starting new competition: creating {initial_datafile_name} file" )
         competition_start(initial_datafile_name, initial_membersfile_name,
                           request_date_s, APIKEY, ws_D0, nodeName)
+
+PRINT_LEVEL = 1  # 0: nothing, 1: global, 2: detailed
+RES_FILE = False # save results on text file
 
 initialisation()
