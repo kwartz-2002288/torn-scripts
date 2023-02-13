@@ -228,7 +228,7 @@ def initialisation():
     request_date_s = request_date.strftime('%Y/%m/%d %H:%M:%S') + ' UTC'
     print(f"Script starts at : {request_date_s}")
 
-    path = "/Users/jpr/torn-scripts/ABOX/"
+    path = repertory + "ABOX/"
     initial_datafile_name = path + "D0.json"
     initial_membersfile_name = path + "members_initial.json"
     new_datafile_name = path + "D1.json"
