@@ -18,7 +18,7 @@ def node():
         path = "/home/jpr/torn-scripts/TT/"
     elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
         repertory = '/Users/jpr/Dropbox/torn/files/' # Mac path
-        path = "/Users/jpr/torn-scripts/TT/"
+        path = "/Users/jpr/TT/"
     else:
         raise Exception('Unknown computer')
     return nodeName, repertory, path
