@@ -269,7 +269,7 @@ def initialisation():
         competition_start(initial_datafile_name, initial_membersfile_name,
                           request_date_s, APIKEY, ws_D0, nodeName)
 
-PRINT_LEVEL = 1  # 0: nothing, 1: global, 2: detailed
+PRINT_LEVEL = 0  # 0: nothing, 1: global, 2: detailed
 RES_FILE = False # save results on text file
 
 initialisation()
