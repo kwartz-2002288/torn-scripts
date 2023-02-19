@@ -8,7 +8,7 @@ def dump_data(data_dict, file_name):
 def node():
     nodeName = os.uname().nodename
     if nodeName == 'raspberrypi' or nodeName == 'acer':
-        path = "/home/jpr/Documents/TT/"
+        path = "/home/jpr/TT/"
     elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
         path = "/Users/jpr/torn-scripts/TT/"
     else:
