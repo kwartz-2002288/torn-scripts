@@ -15,10 +15,10 @@ def node():
     nodeName = os.uname().nodename
     if nodeName == 'raspberrypi' or nodeName == 'acer':
         repertory = '/home/jpr/Documents/torn/files/' # Rapsberry or acer path
-        path = "/home/jpr/torn-scripts/TT/"
+        path = "/home/jpr/TT/"
     elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
         repertory = '/Users/jpr/Dropbox/torn/files/' # Mac path
-        path = "/Users/jpr/TT/"
+        path = "/Users/jpr/torn-scripts/TT/"
     else:
         raise Exception('Unknown computer')
     return nodeName, repertory, path
