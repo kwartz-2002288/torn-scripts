@@ -13,7 +13,7 @@ def node():
         path = "/Users/jpr/torn-scripts/TT/"
     else:
         raise Exception('Unknown computer')
-    return nodeName, repertory, path
+    return nodeName, path
 
 APIKEY = "UAVVm2ESN4K2Ypr4"
 nodeName, path = node()
