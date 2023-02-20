@@ -20,5 +20,5 @@ nodeName, path = node()
 #r = requests.get(f"https://api.torn.com/faction/?selections=timestamp,territory&key={APIKEY}").json()
 r = requests.get(f"https://api.torn.com/torn/?selections=timestamp,territory&key={APIKEY}").json()
 request_date = datetime.fromtimestamp(r["timestamp"], timezone.utc).strftime('%Y-%m-%d-%H-%M')
-res_file_name = path + f"TT-{request_date}.txt"
+res_file_name = path + f"TT-{request_date}.json"
 dump_data(r, res_file_name)
