@@ -10,7 +10,7 @@ def node():
     if nodeName == 'raspberrypi' or nodeName == 'acer':
         path = "/home/jpr/TT/"
     elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
-        path = "/Users/jpr/torn-scripts/TT/"
+        path = "/Users/jpr/TT/"
     else:
         raise Exception('Unknown computer')
     return nodeName, path
