@@ -8,9 +8,9 @@ def dump_data(data_dict, file_name):
 def node():
     nodeName = os.uname().nodename
     if nodeName == 'raspberrypi' or nodeName == 'acer':
-        path = "/home/jpr/TT/"
+        path = "/home/jpr/torndata/TT/"
     elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
-        path = "/Users/jpr/TT/"
+        path = "/Users/jpr/torndata/TT/"
     else:
         raise Exception('Unknown computer')
     return nodeName, path
