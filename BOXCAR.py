@@ -82,6 +82,8 @@ def dump_selected_data(members, file_name):
         data_dict[id]["overdosed"] = drp["overdosed"]
         data_dict[id]["revives"] = drp["revives"]
         data_dict[id]["awards"] = drp["awards"]
+        data_dict[id]["attacksassisted"] = drp["attacksassisted"]
+        data_dict[id]["defendswon"] = drp["defendswon"]
 
     with open(file_name, 'w', encoding='utf-8') as f:
         json.dump(data_dict, f)
@@ -196,8 +198,7 @@ def competition_analysis():
     # BOXCAR contests
     get_score(INITIAL_DATA_FILE_NAME, NEW_DATA_FILE_NAME,
               INITIAL_MEMBERS_FILE_NAME, NEW_MEMBERS_FILE_NAME, res_file,
-              ["peoplebusted", "overdosed", "xantaken", "cantaken", "fraud_crimes", "revives"],
-              n_rank)
+              ["peoplebusted", "overdosed", "xantaken", "cantaken", "fraud_crimes", "revives", "attacksassisted"], n_rank)
     if RES_FILE:
         res_file.close()
 
