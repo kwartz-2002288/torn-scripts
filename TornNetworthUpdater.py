@@ -16,6 +16,15 @@ json_keyfile = repertory + sheetKey_dict['jsonKey']
 credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, scope)
 gc = gspread.authorize(credentials)
 
+def col_name(col_idx):
+# Transforms a column index (integer starting from 1) to a spreadsheet string description A-Z-AA-AZ...AAA etc
+    name = ""
+    while col_idx > 0:
+        mod = (col_idx - 1) % 26
+        name = chr(65 + mod) + name
+        col_idx = (col_idx - mod) // 26
+    return name
+
 def getFactionDonation(APIKey=''):
     try:
         rb = requests.get(f'https://api.torn.com/user/?selections=basic&key={APIKey}').json()
@@ -41,34 +50,40 @@ def getRacket(APIKey=''):
 def racket_evolution(APIKey=''):
     # racket evolution
     ws_R = gc.open_by_key(sheetKey).worksheet('R')
-    old_row = int(ws_R.cell(1,2).value) # row where we will write new data
-    current_row = old_row + 1
-    territoryName = ws_NW_data.acell("D1").value
-
+    territoryNameList = []
+    col = 4
+    territoryName = ws_NW_data.cell(1,col).value
+    while len(territoryName) == 3:
+        territoryNameList.append(territoryName)
+        col += 1
+        territoryName = ws_NW_data.cell(1,col).value
+#    territoryNameList = [ws_NW_data.acell("D1").value, ws_NW_data.acell("E1").value]
     racket_dict = getRacket(APIKey)
-    if territoryName in racket_dict:
-        old_level = int(ws_R.acell("C" + str(old_row)).value)
-        new_level = int(racket_dict[territoryName]["level"])
-        if old_level != new_level: # racket level has changed
-            faction_ID = racket_dict[territoryName]["faction"]
-            faction_name = requests.get(
-                    f"https://api.torn.com/faction/{str(faction_ID)}\
-                    ?selections=&key={APIKey}").json()["name"]
-            racket_name = racket_dict[territoryName]["name"]
-            reward = racket_dict[territoryName]["reward"]
-            L = [[current_date, racket_name, new_level, reward, faction_name]]
-            zone_to_be_filled = "A" + str(current_row) + ":E" + str(current_row)
-            ws_R.update(zone_to_be_filled, L)
-            ws_R.update_cell(1,2,current_row)
-            ws_R.update_cell(2,2,nodeName)
+    for indice, territoryName in enumerate(territoryNameList):
+        old_row = int(ws_R.cell(1, 2+indice*5).value)
+        current_row = old_row + 1 # row where we will eventually write new data
+        if territoryName in racket_dict:
+            old_level = int(ws_R.cell(int(old_row), 3+indice*5).value)
+            new_level = int(racket_dict[territoryName]["level"])
+            if old_level != new_level: # racket level has changed
+                faction_ID = racket_dict[territoryName]["faction"]
+                faction_name = requests.get(
+                        f"https://api.torn.com/faction/{str(faction_ID)}\
+                        ?selections=&key={APIKey}").json()["name"]
+                racket_name = racket_dict[territoryName]["name"]
+                reward = racket_dict[territoryName]["reward"]
+                L = [[current_date, racket_name, new_level, reward, faction_name]]
+                zone_to_be_filled = ( col_name(1+indice*5) + str(current_row) + ":"
+                                    + col_name(5+indice*5) + str(current_row) )
+                ws_R.update(zone_to_be_filled, L)
+                ws_R.update_cell(1, 2+indice*5, current_row)
         else:
-            ws_R.update_cell(old_row,1,current_date)
-            ws_R.update_cell(2,2,nodeName)
-    else:
-        L = [[current_date, "THE END :("]]
-        zone_to_be_filled = "A" + str(current_row) + ":B" + str(current_row)
-        ws_R.update(zone_to_be_filled, L)
-        ws_R.update_cell(2,2,nodeName)
+            L = [[current_date, "THE END :("]]
+            zone_to_be_filled = ( col_name(1+indice*5) + str(current_row) + ":"
+                                + col_name(2+indice*5)+ str(current_row) )
+            ws_R.update(zone_to_be_filled, L)
+    ws_R.update_cell(2,2,nodeName)
+    ws_R.update_cell(3,1,current_date)
 
 # Open Tornstats sheets for NW update
 sheetKey = sheetKey_dict['TornStats']
