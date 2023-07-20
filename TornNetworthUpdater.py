@@ -65,11 +65,13 @@ def racket_evolution(APIKey=''):
         if territoryName in racket_dict:
             old_level = int(ws_R.cell(int(old_row), 3+indice*5).value)
             new_level = int(racket_dict[territoryName]["level"])
-            if old_level != new_level: # racket level has changed
-                faction_ID = racket_dict[territoryName]["faction"]
-                faction_name = requests.get(
-                        f"https://api.torn.com/faction/{str(faction_ID)}\
-                        ?selections=&key={APIKey}").json()["name"]
+            old_faction_name = ws_R.cell(int(old_row), 5+indice*5).value
+            faction_ID = racket_dict[territoryName]["faction"]
+            faction_name = requests.get(
+                    f"https://api.torn.com/faction/{str(faction_ID)}\
+                    ?selections=&key={APIKey}").json()["name"]
+            if old_level != new_level or old_faction_name != faction_name:
+                # racket level or racket owner has changed
                 racket_name = racket_dict[territoryName]["name"]
                 reward = racket_dict[territoryName]["reward"]
                 L = [[current_date, racket_name, new_level, reward, faction_name]]
