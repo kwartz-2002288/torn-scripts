@@ -74,7 +74,10 @@ def dump_selected_data(members, file_name):
                          "level":v["level"],
                          "position":v["position"],
                          "days_in_faction":v["days_in_faction"]}
-        data_dict[id]["fraud_crimes"] = data_requested[id]["criminalrecord"]["fraud_crimes"]
+        if "fraud_crimes" in data_requested[id]["criminalrecord"].keys():
+            data_dict[id]["fraud_crimes"] = data_requested[id]["criminalrecord"]["fraud_crimes"]
+        else:
+            data_dict[id]["fraud_crimes"] = data_requested[id]["criminalrecord"]["fraud"]
         drp = data_requested[id]["personalstats"]
         data_dict[id]["xantaken"] = drp["xantaken"]
         data_dict[id]["cantaken"] = drp["cantaken"]
