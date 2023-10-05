@@ -10,7 +10,6 @@ if nodeName == 'raspberrypi' or nodeName == 'acer':
     repertory = '/home/jpr/torn-data/DATA/' # Rapsberry or acer path
 elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
     repertory = '/Users/jpr/torn-data/DATA/' # Mac path
-#    repertory = '/Users/jpr/Dropbox/torn/files/'# old Mac path
 else:
     raise Exception('Unknown computer')
 
