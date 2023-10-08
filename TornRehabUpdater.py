@@ -23,13 +23,13 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
         new_xantaken=r['personalstats']['xantaken']
         new_lsdtaken=r['personalstats']['lsdtaken']
         new_opitaken=r['personalstats']['opitaken']
-        new_pcptaken=r['personalstats']['pcptaken']
+        new_cantaken=r['personalstats']['cantaken']
         new_victaken=r['personalstats']['victaken']
 
         xan_market_value=x['items']['206']['market_value']
         lsd_market_value=x['items']['199']['market_value']
         opi_market_value=x['items']['200']['market_value']
-        pcp_market_value=x['items']['201']['market_value']
+        can_market_value=x['items']['196']['market_value']
         vic_market_value=x['items']['205']['market_value']
 
 # Open the google sheet (don't forget to share it with the gspread mail adress)
@@ -41,11 +41,11 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
         old_xantaken = int(ws.cell(current_row,2).value)
         old_lsdtaken = int(ws.cell(current_row,3).value)
         old_opitaken = int(ws.cell(current_row,4).value)
-        old_pcptaken = int(ws.cell(current_row,5).value)
+        old_cantaken = int(ws.cell(current_row,5).value)
         old_victaken = int(ws.cell(current_row,6).value)
 
 # Update the sheet only if xantaken has changed
-        if new_xantaken!=old_xantaken or new_lsdtaken!=old_lsdtaken or new_opitaken!=old_opitaken or new_pcptaken!=old_pcptaken or new_victaken!=old_victaken:
+        if new_xantaken!=old_xantaken or new_lsdtaken!=old_lsdtaken or new_opitaken!=old_opitaken or new_cantaken!=old_cantaken or new_victaken!=old_victaken:
                 current_row+=1
                 ws.update_cell(1,2,current_row)
                 ws.update_cell(2,1,"updated by " + nodeName)
@@ -54,7 +54,7 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
                 ws.update_cell(current_row,2,new_xantaken)
                 ws.update_cell(current_row,3,new_lsdtaken)
                 ws.update_cell(current_row,4,new_opitaken)
-                ws.update_cell(current_row,5,new_pcptaken)
+                ws.update_cell(current_row,5,new_cantaken)
                 ws.update_cell(current_row,6,new_victaken)
                 if new_xantaken!=old_xantaken:
                         ws.update_cell(current_row,7,xan_market_value)
@@ -62,8 +62,8 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
                         ws.update_cell(current_row,7,lsd_market_value)
                 elif new_opitaken!=old_opitaken:
                         ws.update_cell(current_row,7,opi_market_value)
-                elif new_pcptaken!=old_pcptaken:
-                        ws.update_cell(current_row,7,pcp_market_value)
+                elif new_cantaken!=old_cantaken:
+                        ws.update_cell(current_row,7,can_market_value)
                 elif new_victaken!=old_victaken:
                         ws.update_cell(current_row,7,vic_market_value)
         return
