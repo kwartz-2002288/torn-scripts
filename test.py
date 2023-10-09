@@ -10,6 +10,7 @@ path = "/Users/jpr/torn-data/DATA/"
 #     json.dump(structure, f)
 print(structure)
 with open(path+'structure.txt','r') as f:
-    S = json.load(f)
+	S = json.load(f)
 print(S)
 print(S[1]["K1"])
+print("THE END")
