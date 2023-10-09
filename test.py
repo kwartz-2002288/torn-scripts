@@ -13,3 +13,5 @@ with open(path+'structure.txt','r') as f:
 	S = json.load(f)
 print(S)
 print(S[1]["K1"])
+
+print("test pour github")
