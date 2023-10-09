@@ -14,4 +14,5 @@ with open(path+'structure.txt','r') as f:
 print(S)
 print(S[1]["K1"])
 
-print("nouveau test pour github")
+print("test pour github")
+print("encore un petit dernier test pour github")
