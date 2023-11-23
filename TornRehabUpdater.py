@@ -47,7 +47,7 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
 # Update the sheet only if xantaken has changed
         if new_xantaken!=old_xantaken or new_lsdtaken!=old_lsdtaken or new_opitaken!=old_opitaken or new_cantaken!=old_cantaken or new_victaken!=old_victaken:
                 current_row+=1
-                ws.update_cell(1,2,current_row)
+#                ws.update_cell(1,2,current_row)   # Done in spreadsheet now !
                 ws.update_cell(2,1,"updated by " + nodeName)
                 current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
                 ws.update_cell(current_row,1,current_date)

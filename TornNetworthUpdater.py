@@ -130,13 +130,18 @@ for stock_id, n_increments in LentStocks.items():
 
 RealStocks = int(StockTotal + LentStocksTotal)
 
-### ADD Oil Rig Participation
+### ADD Oil Rig/TV network Participation
 ### cell B1 CAREFUL to number format in spreadsheet
 Oil_Rig_Part = ws_NW_data.acell("B1").value
 Oil_Rig_Part = ''.join(Oil_Rig_Part.split())
 Oil_Rig_Part = int(Oil_Rig_Part)
-RealNetworth = int(NetworthNet + LentStocksTotal) + Oil_Rig_Part
 
+### update TV networth value
+Nub_TV_Part = ws_NW_data.acell("B2").value
+Nub_TV_Part = ''.join(Nub_TV_Part.split())
+Nub_TV_Part = int(Nub_TV_Part)
+
+RealNetworth = int(NetworthNet + LentStocksTotal) + Oil_Rig_Part + Nub_TV_Part
 
 current_row = int(ws.cell(1,2).value) + 1 # row where we will write new data
 current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -158,6 +163,6 @@ L = [[NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal,
 zone_to_be_filled = "B" + str(current_row) + ":M" + str(current_row)
 ws.update(zone_to_be_filled, L)
 
-ws.update_cell(1,2,current_row)
+# ws.update_cell(1,2,current_row) (now done by MATCH fonction in spreadsheet)
 ws.update_cell(2,2,nodeName)
 ws.update_cell(current_row,1,current_date)

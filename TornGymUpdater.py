@@ -25,7 +25,6 @@ def updateSpecialGym ( name , gc, sheetKey, APIKey_dict, therow ):
 
 # Get stats, convert in millions and update sheet
 
-
         L = [name]
         thestat=['dexterity','defense','speed','strength']
         for thestat in ['dexterity','defense','speed','strength']:
