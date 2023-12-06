@@ -46,6 +46,9 @@ weekly_customers = company_profile["weekly_customers"]
 # parsing employee data
 employees = []
 director_wage = 4_000_000
+kivou_wage = 1_100_000
+total_investment = 27_500_000_000
+KK_investment = 14_500_000_000
 wages_total = director_wage
 working_stats_eff_total = 0
 settle_total = 0
@@ -125,17 +128,22 @@ for w in [ws, ws2]:
     w.update_cell(1, 4, current_date + " TCT")
 
 #evolution spreadsheet
-net_income = daily_income - wages_total - advertising_budget
+daily_profit = daily_income - wages_total - advertising_budget
+minimum_funds = 7 * (wages_total - director_wage + advertising_budget)
+ROI = daily_profit*365/total_investment
+ROI2 = (daily_profit * KK_investment/total_investment
+        + director_wage + kivou_wage) * 365 / KK_investment
 L_zone = [current_date, company_name, rating, popularity, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
     addiction_total, company_effectiveness_total,
     weekly_customers, daily_customers, value/1000000000,
-    company_funds/1000000, weekly_income/1000000, daily_income/1000000,
+    company_funds/1000000, minimum_funds/1000000,
+    weekly_income/1000000, ROI2, daily_income/1000000,
     wages_total/1000000, advertising_budget/1000000,
-    net_income/1000000]
+    daily_profit/1000000, ROI]
 
 ws_evo = gc.open_by_key(sheetKey).worksheet('Evolution')
 current_row = ws_evo.cell(1,5).value # last row that has already been written
 current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
-zone_to_be_filled = "A" + str(current_row) + ":U" + str(current_row)
+zone_to_be_filled = "A" + str(current_row) + ":X" + str(current_row)
 ws_evo.update(zone_to_be_filled, [L_zone])
