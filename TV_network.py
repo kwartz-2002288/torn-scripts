@@ -55,6 +55,7 @@ settle_total = 0
 EE_total = 0
 director_education_total = 0
 addiction_total = 0
+inactivity_total = 0
 company_effectiveness_total = 0
 
 for employee_id, employee in company_employees.items():
@@ -76,6 +77,8 @@ for employee_id, employee in company_employees.items():
     director_education_total += director_education
     effectiveness_total = employee["effectiveness"].get("total", 0)
     company_effectiveness_total += effectiveness_total
+    inactivity = employee["effectiveness"].get("inactivity", 0)
+    inactivity_total += inactivity
 
     # afk analysis
     timestamp = employee["last_action"]["timestamp"]
@@ -95,7 +98,7 @@ for employee_id, employee in company_employees.items():
         INT, END, MAN,
         stats_combo, wage, addiction,
         settled_in, director_education, effectiveness_total,
-        afk_days, afk_hours])
+        afk_days, afk_hours, inactivity])
 
 employees_header = [
         "id","name","position",
@@ -103,7 +106,7 @@ employees_header = [
         "INT", "END", "MAN",
         "stats_combo","wage","addiction",
         "settled_in", "dir_educ", "eff_tot",
-        "afk_d", "afk_h"]
+        "afk_d", "afk_h", "inactivity"]
 
 #sorting employee list
 criterion = "position"
@@ -135,7 +138,7 @@ ROI2 = (daily_profit * KK_investment/total_investment
         + director_wage + kivou_wage) * 365 / KK_investment
 L_zone = [current_date, company_name, rating, popularity, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
-    addiction_total, company_effectiveness_total,
+    addiction_total, inactivity_total, company_effectiveness_total,
     weekly_customers, daily_customers, value/1000000000,
     company_funds/1000000, minimum_funds/1000000,
     weekly_income/1000000, ROI2, daily_income/1000000,
@@ -145,5 +148,5 @@ L_zone = [current_date, company_name, rating, popularity, efficiency, environmen
 ws_evo = gc.open_by_key(sheetKey).worksheet('Evolution')
 current_row = ws_evo.cell(1,5).value # last row that has already been written
 current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
-zone_to_be_filled = "A" + str(current_row) + ":X" + str(current_row)
+zone_to_be_filled = "A" + str(current_row) + ":ZZ" + str(current_row)
 ws_evo.update(zone_to_be_filled, [L_zone])
