@@ -65,17 +65,19 @@ def updateCrimes(name):
         "crime_total"
     ]
 
-    #writing in spreadsheets
+    #writing in spreadsheets if total crimes has changed
     ws = gc.open_by_key(sheetKey).worksheet('Crimes2'+name)
-    ws.update_cell(1, 1, "Updated by " + nodeName)
-    # Can be executed only when a nex column is created
-    #zone_to_be_filled = "A2:Z2"
-    #ws.update(zone_to_be_filled, [crimes2_header])
-    current_row = ws.cell(1,3).value # last row that has already been written
-    current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
-    zone_to_be_filled = "B" + str(current_row) + ":Z" + str(current_row)
-    ws.update_cell(current_row, 1, current_date)
-    ws.update(zone_to_be_filled, [crimes2_data])
+    old_total = int(ws.cell(2,1).value)
+    if old_total < crime_total:
+        ws.update_cell(1, 1, "Updated by " + nodeName)
+        # Can be executed only when a new column is created
+        #zone_to_be_filled = "A2:Z2"
+        #ws.update(zone_to_be_filled, [crimes2_header])
+        current_row = ws.cell(1,3).value # last row that has already been written
+        current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
+        zone_to_be_filled = "B" + str(current_row) + ":Z" + str(current_row)
+        ws.update_cell(current_row, 1, current_date)
+        ws.update(zone_to_be_filled, [crimes2_data])
 
 for name in ('Kwartz','Kivou'):
     updateCrimes(name)
