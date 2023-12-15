@@ -1,4 +1,5 @@
-import requests, gspread, string, datetime
+import requests, gspread, string
+from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 # COUCOU
@@ -12,6 +13,19 @@ json_keyfile=repertory+sheetKey_dict['jsonKey']
 credentials = ServiceAccountCredentials.from_json_keyfile_name(json_keyfile, scope)
 gc = gspread.authorize(credentials)
 sheetKey = sheetKey_dict['TornStats']
+
+def convert_date_in_spreadsheet_number(date):
+    # Convert a python date (typically utc datetime format) to a google sheet compatible number
+    # Define the reference date for Google Sheets (December 30, 1899)
+    reference_date = datetime(1899, 12, 30, tzinfo=timezone.utc)
+    # Calculate the difference in days
+    days_difference = (date - reference_date).days
+    # Calculate the fraction of the day
+    fraction_of_day = (date - datetime(date.year, date.month, date.day,
+        tzinfo=timezone.utc)).total_seconds() / 86400.0  # 86400 seconds in a day
+    # Calculate the total number
+    date_number = days_difference + fraction_of_day
+    return date_number
 
 def updateRehab(name, gc, sheetKey, APIKey_dict):
         APIKEY = APIKey_dict[name]
@@ -44,21 +58,25 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
         old_cantaken = int(ws.cell(current_row,5).value)
         old_victaken = int(ws.cell(current_row,6).value)
 
-# Update the sheet only if xantaken has changed
+# Update the sheet only if  a number has changed
         if new_xantaken!=old_xantaken or new_lsdtaken!=old_lsdtaken or new_opitaken!=old_opitaken or new_cantaken!=old_cantaken or new_victaken!=old_victaken:
                 current_row+=1
 #                ws.update_cell(1,2,current_row)   # Done in spreadsheet now !
                 ws.update_cell(2,1,"updated by " + nodeName)
-                current_date = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-                ws.update_cell(current_row,1,current_date)
-                ws.update_cell(current_row,2,new_xantaken)
-                ws.update_cell(current_row,3,new_lsdtaken)
-                ws.update_cell(current_row,4,new_opitaken)
-                ws.update_cell(current_row,5,new_cantaken)
-                ws.update_cell(current_row,6,new_victaken)
-                if new_xantaken!=old_xantaken:
-                        ws.update_cell(current_row,7,xan_market_value)
-                elif new_lsdtaken!=old_lsdtaken:
+                date_now = datetime.now(timezone.utc)
+                current_date_str = date_now.strftime("%d/%m/%Y %H:%M:%S")
+                current_date_num = convert_date_in_spreadsheet_number(date_now)
+                L = [current_date_num, new_xantaken, new_lsdtaken, new_opitaken,
+                    new_cantaken, new_victaken, xan_market_value]
+                zone_to_be_filled = "A" + str(current_row) + ":G" + str(current_row)
+                ws.update(zone_to_be_filled, [L])
+                # ws.update_cell(current_row,1,current_date_num)
+                # ws.update_cell(current_row,2,new_xantaken)
+                # ws.update_cell(current_row,3,new_lsdtaken)
+                # ws.update_cell(current_row,4,new_opitaken)
+                # ws.update_cell(current_row,5,new_cantaken)
+                # ws.update_cell(current_row,6,new_victaken)
+                if new_lsdtaken!=old_lsdtaken:
                         ws.update_cell(current_row,7,lsd_market_value)
                 elif new_opitaken!=old_opitaken:
                         ws.update_cell(current_row,7,opi_market_value)

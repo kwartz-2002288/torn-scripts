@@ -1,7 +1,20 @@
 import requests, gspread, string
-from datetime import datetime
+from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
+
+def convert_date_in_spreadsheet_number(date):
+    # Convert a python date (typically utc datetime format) to a google sheet compatible number
+    # Define the reference date for Google Sheets (December 30, 1899)
+    reference_date = datetime(1899, 12, 30, tzinfo=timezone.utc)
+    # Calculate the difference in days
+    days_difference = (date - reference_date).days
+    # Calculate the fraction of the day
+    fraction_of_day = (date - datetime(date.year, date.month, date.day,
+        tzinfo=timezone.utc)).total_seconds() / 86400.0  # 86400 seconds in a day
+    # Calculate the total number
+    date_number = days_difference + fraction_of_day
+    return date_number
 
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
 APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
@@ -19,7 +32,8 @@ sheetKey = sheetKey_dict['TornStats']
 
 def old_value(ws, column, current_row, N):
     v = ws.acell(column + str(current_row - N)).value
-    return int(''.join(v.split())) # remove spaces
+    v = v.replace(",", "").replace(" ", "") # clean spreadsheet chain
+    return int(v) # remove ',' in US spreadheet numbers
 
 def delta_t(ws, current_row, N):
     d = ws.cell(str(current_row - N),1).value
@@ -29,7 +43,7 @@ def delta_t(ws, current_row, N):
 def delta_N(ws, new, column, current_row, N):
     return (new - old_value(ws, column, current_row, N))/delta_t(ws, current_row, N)
 
-def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
+def updatePersonalStats(name):
     APIKEY = APIKey_dict[name]
 
 # Get data from TORN in r (dictionnary)
@@ -40,7 +54,7 @@ def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
     ws = gc.open_by_key(sheetKey).worksheet(f'Stats{name}')
 # NEW version
     current_row = ws.cell(1,2).value # last row that has already been written
-    current_row = int(''.join(current_row.split())) #clean string and convert to int
+    current_row = int(current_row.replace(",", "").replace(" ", "")) #clean string and convert to int
 
     names_col = ["totalstats", "dexterity", "strength", "defense", "speed", "manuallabor", "intelligence", "endurance", "totalworkingstats"]
 # Read stats names in sheet range 2, columns 3 to 9
@@ -52,7 +66,9 @@ def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
     new_total_stats = r["totalstats"]
     new_total_job = r["totalworkingstats"]
     current_row += 1
-    current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    date_now = datetime.now(timezone.utc)
+    current_date_str = date_now.strftime("%d/%m/%Y %H:%M:%S")
+    current_date_num = convert_date_in_spreadsheet_number(date_now)
 
     old_total_1 = old_value(ws, "B", current_row, 1)
     old_total_job_1 = old_value(ws, "M", current_row, 1)
@@ -64,19 +80,19 @@ def updatePersonalStats( name , gc, sheetKey, APIKey_dict ):
     delta_job_50 = delta_N(ws, new_total_job, "M", current_row, 365)
     # print(delta_1, delta_10, delta_365)
     # print(delta_job_1, delta_job_50)
-    L_zone = L_stats[0:5] + [delta_1, delta_10, delta_365/1000000] + L_stats[5:9] + [delta_job_1, delta_job_50]
-    zone_to_be_filled = "B" + str(current_row) + ":O" + str(current_row)
+    L_zone = [current_date_num] + L_stats[0:5] \
+            + [delta_1, delta_10, delta_365/1000000] \
+            + L_stats[5:9] + [delta_job_1, delta_job_50]
+    zone_to_be_filled = "A" + str(current_row) + ":O" + str(current_row)
     ws.update(zone_to_be_filled, [L_zone])
-    ws.update_cell(current_row,1,current_date)
-    # ws.update_cell(1,2,current_row) # current row evaluated in spreadsheet now!
     ws.update_cell(2,1,'Updated by ' + nodeName)
     return new_total_stats
 
 L = []
 for name in ('Kwartz','Kivou','Quatuor'):
-    L.append(updatePersonalStats(name , gc, sheetKey, APIKey_dict))
+    L.append(updatePersonalStats(name))
 delta = L[0] - L[1]
 ws = gc.open_by_key(sheetKey).worksheet('StatsKwartz')
 current_row = ws.cell(1,2).value # last row that has already been written
-current_row = int(''.join(current_row.split())) #clean string and convert to int
+current_row = int(current_row.replace(",", "").replace(" ", "")) #clean string and convert to int
 ws.update('P'+ str(current_row), delta)
