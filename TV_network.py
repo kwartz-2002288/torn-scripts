@@ -2,7 +2,6 @@ import requests, gspread, string
 from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
-import csv
 
 # Set_up
 APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
@@ -24,7 +23,8 @@ company_profile = requests.get(f"https://api.torn.com/company/?selections=profil
 
 
 now_date = datetime.now(timezone.utc)
-current_date = now_date.strftime("%d/%m/%Y %H:%M:%S")
+current_date_str = now_date.strftime("%d/%m/%Y %H:%M:%S")
+current_date_num = readKeysLib.python_date_to_excel_number(now_date)
 
 # parsing company data
 company_funds = company_detailed["company_funds"]
@@ -128,7 +128,7 @@ ws2 = gc.open_by_key(sheetKey2).worksheet('wages')
 
 for w in [ws, ws2]:
     w.update_cell(1, 3, "Updated by " + nodeName)
-    w.update_cell(1, 4, current_date + " TCT")
+    w.update_cell(1, 4, current_date_str + " TCT")
 
 #evolution spreadsheet
 daily_profit = daily_income - wages_total - advertising_budget
@@ -136,7 +136,7 @@ minimum_funds = 7 * (wages_total - director_wage + advertising_budget)
 ROI = daily_profit*365/total_investment
 ROI2 = (daily_profit * KK_investment/total_investment
         + director_wage + kivou_wage) * 365 / KK_investment
-L_zone = [current_date, company_name, rating, popularity, efficiency, environment,
+L_zone = [current_date_num, company_name, rating, popularity, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
     addiction_total, inactivity_total, company_effectiveness_total,
     weekly_customers, daily_customers, value/1000000000,

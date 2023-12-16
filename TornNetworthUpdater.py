@@ -1,5 +1,5 @@
 import requests, gspread, string, json, pprint
-from datetime import datetime
+from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
@@ -60,12 +60,14 @@ def racket_evolution(APIKey=''):
 #    territoryNameList = [ws_NW_data.acell("D1").value, ws_NW_data.acell("E1").value]
     racket_dict = getRacket(APIKey)
     for indice, territoryName in enumerate(territoryNameList):
-        old_row = int(ws_R.cell(1, 2+indice*5).value)
+        old_row = ws_R.cell(1, 2+indice*5).value
+        old_row = int(old_row.replace(",", "").replace(" ", ""))
         current_row = old_row + 1 # row where we will eventually write new data
         if territoryName in racket_dict:
-            old_level = int(ws_R.cell(int(old_row), 3+indice*5).value)
+            old_level = ws_R.cell(old_row, 3+indice*5).value
+            old_level = int(old_level.replace(",", "").replace(" ", ""))
             new_level = int(racket_dict[territoryName]["level"])
-            old_faction_name = ws_R.cell(int(old_row), 5+indice*5).value
+            old_faction_name = ws_R.cell(old_row, 5+indice*5).value
             faction_ID = racket_dict[territoryName]["faction"]
             faction_name = requests.get(
                     f"https://api.torn.com/faction/{str(faction_ID)}\
@@ -74,24 +76,26 @@ def racket_evolution(APIKey=''):
                 # racket level or racket owner has changed
                 racket_name = racket_dict[territoryName]["name"]
                 reward = racket_dict[territoryName]["reward"]
-                L = [[current_date, racket_name, new_level, reward, faction_name]]
+                L = [[current_date_num, racket_name, new_level, reward, faction_name]]
                 zone_to_be_filled = ( col_name(1+indice*5) + str(current_row) + ":"
                                     + col_name(5+indice*5) + str(current_row) )
                 ws_R.update(zone_to_be_filled, L)
-                ws_R.update_cell(1, 2+indice*5, current_row)
         else:
-            L = [[current_date, "THE END :("]]
+            L = [[current_date_num, "THE END :("]]
             zone_to_be_filled = ( col_name(1+indice*5) + str(current_row) + ":"
                                 + col_name(2+indice*5)+ str(current_row) )
             ws_R.update(zone_to_be_filled, L)
     ws_R.update_cell(2,2,nodeName)
-    ws_R.update_cell(3,1,current_date)
+    ws_R.update_cell(3,1,current_date_num)
 
 # Open Tornstats sheets for NW update
 sheetKey = sheetKey_dict['TornStats']
 ws = gc.open_by_key(sheetKey).worksheet('NW')
 ws_NW_data = gc.open_by_key(sheetKey).worksheet('NW_data')
-current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+# Current date in various format
+date_now = datetime.now(timezone.utc)
+current_date_str = date_now.strftime("%d/%m/%Y %H:%M:%S")
+current_date_num = readKeysLib.python_date_to_excel_number(date_now)
 
 # New feature, racket evolution
 racket_evolution(APIKey_dict['Kwartz'])
@@ -133,36 +137,33 @@ RealStocks = int(StockTotal + LentStocksTotal)
 ### ADD Oil Rig/TV network Participation
 ### cell B1 CAREFUL to number format in spreadsheet
 Oil_Rig_Part = ws_NW_data.acell("B1").value
-Oil_Rig_Part = ''.join(Oil_Rig_Part.split())
-Oil_Rig_Part = int(Oil_Rig_Part)
+Oil_Rig_Part = int(Oil_Rig_Part.replace(",", "").replace(" ", ""))
 
 ### update TV networth value
 Nub_TV_Part = ws_NW_data.acell("B2").value
-Nub_TV_Part = ''.join(Nub_TV_Part.split())
-Nub_TV_Part = int(Nub_TV_Part)
+Nub_TV_Part = int(Nub_TV_Part.replace(",", "").replace(" ", ""))
 
 RealNetworth = int(NetworthNet + LentStocksTotal) + Oil_Rig_Part + Nub_TV_Part
 
 current_row = int(ws.cell(1,2).value) + 1 # row where we will write new data
-current_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
 # Compute evolutions on N_average rows
 N_average = 30
 old_NW = ws.acell("H" + str(current_row - N_average)).value
-old_NW = int(''.join(old_NW.split())) # remove trailing and inside spaces
+old_NW =  int(old_NW.replace(",", "").replace(" ", "")) # remove trailing and inside spaces
 old_date = ws.cell(str(current_row - N_average),1).value
 old_date_dt = datetime.strptime(old_date, '%d/%m/%Y %H:%M:%S') # convert to datetime
+
 delta_days = (datetime.now() - old_date_dt).days # use deltatime object
 Delta_averaged = int((RealNetworth  - old_NW) / delta_days)
 
 old_NW_1 = ws.acell("H" + str(current_row - 1)).value
-old_NW_1 = int(''.join(old_NW_1.split()))
+old_NW_1 = int(old_NW_1.replace(",", "").replace(" ", ""))
 Delta = int(RealNetworth  - old_NW_1)
 
-L = [[NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal, RealStocks, RealNetworth, NetworthKwartz/1000000000., NetworthKivou/1000000000., Cash, Delta, Delta_averaged]]
-zone_to_be_filled = "B" + str(current_row) + ":M" + str(current_row)
+L = [[current_date_num, NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal, RealStocks, RealNetworth, NetworthKwartz/1000000000., NetworthKivou/1000000000., Cash, Delta, Delta_averaged]]
+zone_to_be_filled = "A" + str(current_row) + ":M" + str(current_row)
 ws.update(zone_to_be_filled, L)
 
 # ws.update_cell(1,2,current_row) (now done by MATCH fonction in spreadsheet)
 ws.update_cell(2,2,nodeName)
-ws.update_cell(current_row,1,current_date)

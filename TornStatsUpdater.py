@@ -3,19 +3,6 @@ from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
-def convert_date_in_spreadsheet_number(date):
-    # Convert a python date (typically utc datetime format) to a google sheet compatible number
-    # Define the reference date for Google Sheets (December 30, 1899)
-    reference_date = datetime(1899, 12, 30, tzinfo=timezone.utc)
-    # Calculate the difference in days
-    days_difference = (date - reference_date).days
-    # Calculate the fraction of the day
-    fraction_of_day = (date - datetime(date.year, date.month, date.day,
-        tzinfo=timezone.utc)).total_seconds() / 86400.0  # 86400 seconds in a day
-    # Calculate the total number
-    date_number = days_difference + fraction_of_day
-    return date_number
-
 # APIKeys and sheetKeys are saved in files in an external repertory see the module readKeysLib
 APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
 repertory = sheetKey_dict['rep']
@@ -68,7 +55,7 @@ def updatePersonalStats(name):
     current_row += 1
     date_now = datetime.now(timezone.utc)
     current_date_str = date_now.strftime("%d/%m/%Y %H:%M:%S")
-    current_date_num = convert_date_in_spreadsheet_number(date_now)
+    current_date_num = readKeysLib.python_date_to_excel_number(date_now)
 
     old_total_1 = old_value(ws, "B", current_row, 1)
     old_total_job_1 = old_value(ws, "M", current_row, 1)
