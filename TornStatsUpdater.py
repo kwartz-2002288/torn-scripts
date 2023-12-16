@@ -23,7 +23,7 @@ def old_value(ws, column, current_row, N):
     return int(v) # remove ',' in US spreadheet numbers
 
 def delta_t(ws, current_row, N):
-    d = ws.cell(str(current_row - N),1).value
+    d = ws.cell(current_row - N,1).value
     dt = datetime.strptime(d, '%d/%m/%Y %H:%M:%S') # convert to datetime
     return (datetime.now() - dt).days # use deltatime object
 
