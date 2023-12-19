@@ -34,6 +34,7 @@ def updateCrimes(name):
     disposal = float(sk["disposal"])
     reviving = float(sk["reviving"])
     hunting = float(sk["hunting"])
+    cracking = float(sk["cracking"])
     racing = float(sk["racing"])
 
     # parsing crimes data
@@ -51,7 +52,7 @@ def updateCrimes(name):
     crimes2_data = [current_date_num,
         bootlegging, burglary, card_skimming, graffiti,
         hustling, pickpocketing, search_for_cash, shoplifting,
-        disposal, reviving, hunting, racing,
+        disposal, cracking, reviving, hunting, racing,
         vandalism, theft, counterfeiting, fraud,
         illicitservices, cybercrime, extortion, illegalproduction,
         crime_total
@@ -59,7 +60,7 @@ def updateCrimes(name):
     crimes2_header = [ "date",
         "bootlegging", "burglary", "card_skimming", "graffiti",
         "hustling", "pickpocketing", "search_for_cash", "shoplifting",
-        "disposal", "reviving", "hunting", "racing",
+        "disposal", "cracking", "reviving", "hunting", "racing",
         "vandalism", "theft", "counterfeiting", "fraud",
         "illicitservices", "cybercrime", "extortion", "illegalproduction",
         "crime_total"
