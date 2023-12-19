@@ -32,9 +32,9 @@ def updateCrimes(name):
     search_for_cash = float(sk["search_for_cash"])
     shoplifting = float(sk["shoplifting"])
     disposal = float(sk["disposal"])
-    reviving = float(sk["reviving"])
+    cracking = float(sk.get("cracking",0))
     hunting = float(sk["hunting"])
-    cracking = float(sk["cracking"])
+    reviving = float(sk["reviving"])
     racing = float(sk["racing"])
 
     # parsing crimes data
