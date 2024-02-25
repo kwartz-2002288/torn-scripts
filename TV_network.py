@@ -127,8 +127,8 @@ ws = gc.open_by_key(sheetKey).worksheet('wages')
 ws2 = gc.open_by_key(sheetKey2).worksheet('wages')
 
 for w in [ws, ws2]:
-    w.update_cell(1, 3, "Updated by " + nodeName)
-    w.update_cell(1, 4, current_date_str + " TCT")
+    w.update_cell(1, 1, "Updated by " + nodeName + " " + current_date_str + " TCT")
+#    w.update_cell(1, 4, current_date_str + " TCT")
 
 #evolution spreadsheet
 daily_profit = daily_income - wages_total - advertising_budget
@@ -146,7 +146,7 @@ L_zone = [current_date_num, company_name, rating, popularity, efficiency, enviro
     daily_profit/1000000, ROI]
 
 ws_evo = gc.open_by_key(sheetKey).worksheet('Evolution')
-current_row = ws_evo.cell(1,5).value # last row that has already been written
+current_row = ws_evo.cell(1,3).value # last row that has already been written
 current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
 zone_to_be_filled = "A" + str(current_row) + ":ZZ" + str(current_row)
 ws_evo.update(zone_to_be_filled, [L_zone])
