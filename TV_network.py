@@ -48,7 +48,7 @@ employees = []
 director_wage = 4_000_000
 kivou_wage = 1_100_000
 total_investment = 27_500_000_000
-KK_investment = 14_500_000_000
+KK_investment = 17_500_000_000
 wages_total = director_wage
 working_stats_eff_total = 0
 settle_total = 0
@@ -133,9 +133,8 @@ for w in [ws, ws2]:
 #evolution spreadsheet
 daily_profit = daily_income - wages_total - advertising_budget
 minimum_funds = 7 * (wages_total - director_wage + advertising_budget)
-ROI = daily_profit*365/total_investment
-ROI2 = (daily_profit * KK_investment/total_investment
-        + director_wage + kivou_wage) * 365 / KK_investment
+ROI = daily_profit * 365 / total_investment
+ROI2 = ROI + (director_wage + kivou_wage) * 365 / KK_investment
 L_zone = [current_date_num, company_name, rating, popularity, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
     addiction_total, inactivity_total, company_effectiveness_total,
