@@ -135,14 +135,18 @@ daily_profit = daily_income - wages_total - advertising_budget
 minimum_funds = 7 * (wages_total - director_wage + advertising_budget)
 ROI = daily_profit * 365 / total_investment
 ROI2 = ROI + (director_wage + kivou_wage) * 365 / KK_investment
+company_effectiveness_max = (company_effectiveness_total -
+                            inactivity_total - addiction_total)
+efficiency_loss = (-inactivity_total-addiction_total)/company_effectiveness_max
 L_zone = [current_date_num, company_name, rating, popularity, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
-    addiction_total, inactivity_total, company_effectiveness_total,
+    addiction_total, inactivity_total,
+    company_effectiveness_total, company_effectiveness_max, efficiency_loss,
     weekly_customers, daily_customers, value/1000000000,
     company_funds/1000000, minimum_funds/1000000,
-    weekly_income/1000000, ROI2, daily_income/1000000,
+    weekly_income/1000000, daily_income/1000000,
     wages_total/1000000, advertising_budget/1000000,
-    daily_profit/1000000, ROI]
+    daily_profit/1000000, ROI, ROI2]
 
 ws_evo = gc.open_by_key(sheetKey).worksheet('Evolution')
 current_row = ws_evo.cell(1,3).value # last row that has already been written
