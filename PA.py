@@ -13,19 +13,21 @@ crimes = requests.get(f"https://api.torn.com/faction/?selections=crimes&key={API
 CE_ranks = {str(id): r+1 for r, id in enumerate(crimeexp)}
 
 # Ask for search time window
-# print("Indicate the UTC date from which the PAs will be searched")
-# day1 = int(input("Enter the day (1-31): "))
-# month1 = int(input("Enter the month (1-12): "))
-# year1 = int(input("Enter the year (four digits): "))
-# print("Indicate the UTC date before which the PAs will be searched")
-# day2 = int(input("Enter the day (1-31): "))
-# month2 = int(input("Enter the month (1-12): "))
-# year2 = int(input("Enter the year (four digits): "))
+print("Indicate the UTC date from which the PAs will be searched")
+day1 = int(input("Enter the day (1-31): "))
+month1 = int(input("Enter the month (1-12): "))
+year1 = 2024
+#year1 = int(input("Enter the year (four digits): "))
+print("Indicate the UTC date before which the PAs will be searched")
+day2 = int(input("Enter the day (1-31): "))
+month2 = int(input("Enter the month (1-12): "))
+year2 = 2024
+#year2 = int(input("Enter the year (four digits): "))
 # Create the datetime objects
-# user_date1 = datetime(year1, month1, day1, tzinfo=timezone.utc)
-# user_date2 = datetime(year2, month2, day2, tzinfo=timezone.utc)
-user_date1 = datetime(2024 , 3, 28, tzinfo=timezone.utc)
-user_date2 = datetime(2024, 4, 2, tzinfo=timezone.utc)
+user_date1 = datetime(year1, month1, day1, tzinfo=timezone.utc)
+user_date2 = datetime(year2, month2, day2, tzinfo=timezone.utc)
+# user_date1 = datetime(2024 , 3, 28, tzinfo=timezone.utc)
+# user_date2 = datetime(2024, 4, 2, tzinfo=timezone.utc)
 
 # Calculate the corresponding timestamps
 timestamp1 = user_date1.timestamp()
