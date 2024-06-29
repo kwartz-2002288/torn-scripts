@@ -15,7 +15,7 @@ def node():
         raise Exception('Unknown computer')
     return nodeName, path
 
-APIKEY = "mettre apikey ici"
+APIKEY = "Put a valid API key here"
 nodeName, path = node()
 #r = requests.get(f"https://api.torn.com/faction/?selections=timestamp,territory&key={APIKEY}").json()
 r = requests.get(f"https://api.torn.com/torn/?selections=timestamp,territory&key={APIKEY}").json()
