@@ -3,6 +3,19 @@ from datetime import datetime, timezone
 from oauth2client.service_account import ServiceAccountCredentials
 import readKeysLib
 
+
+def get_name(id):
+    try:
+        return members[id]["name"]
+    except KeyError:
+        return "***Kicked"
+
+def get_rank(id):
+    try:
+        return CE_ranks[id]
+    except KeyError:
+        return 99
+
 APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
 APIKEY = APIKey_dict['Kwartz']
 
@@ -17,12 +30,12 @@ print("Indicate the UTC date from which the PAs will be searched")
 day1 = int(input("Enter the day (1-31): "))
 month1 = int(input("Enter the month (1-12): "))
 year1 = 2024
-#year1 = int(input("Enter the year (four digits): "))
+year1 = int(input("Enter the year (four digits): "))
 print("Indicate the UTC date before which the PAs will be searched")
 day2 = int(input("Enter the day (1-31): "))
 month2 = int(input("Enter the month (1-12): "))
 year2 = 2024
-#year2 = int(input("Enter the year (four digits): "))
+year2 = int(input("Enter the year (four digits): "))
 # Create the datetime objects
 user_date1 = datetime(year1, month1, day1, tzinfo=timezone.utc)
 user_date2 = datetime(year2, month2, day2, tzinfo=timezone.utc)
@@ -53,8 +66,8 @@ for k, crime in crimes.items():
         money_gain = int(crime["money_gain"]/1_000_000)
         money_total += money_gain
         participants_id = [list(d.keys())[0] for d in crime["participants"]]
-        participants_names = [members[id]["name"] for id in participants_id]
-        participants_ranks = [CE_ranks[id] for id in participants_id]
+        participants_names = [get_name(id) for id in participants_id]
+        participants_ranks = [get_rank(id) for id in participants_id]
         names_ranks = [n + "_" + str(r) for n, r
                     in zip(participants_names, participants_ranks)]
         team = min(participants_ranks)
