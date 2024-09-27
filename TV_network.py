@@ -31,6 +31,7 @@ company_funds = company_detailed["company_funds"]
 popularity = company_detailed["popularity"]
 efficiency = company_detailed["efficiency"]
 environment = company_detailed["environment"]
+trains_available = company_detailed["trains_available"]
 advertising_budget = company_detailed["advertising_budget"]
 value = company_detailed["value"]
 company_name = company_profile["name"]
@@ -140,7 +141,8 @@ ROI2 = ROI + (director_wage + kivou_wage) * 365 / KK_investment
 company_effectiveness_max = (company_effectiveness_total -
                             inactivity_total - addiction_total)
 efficiency_loss = (-inactivity_total-addiction_total)/company_effectiveness_max
-L_zone = [current_date_num, company_name, rating, popularity, efficiency, environment,
+L_zone = [current_date_num, company_name, rating, popularity,
+    trains_available, efficiency, environment,
     working_stats_eff_total, settle_total, EE_total, director_education_total,
     addiction_total, inactivity_total,
     company_effectiveness_total, company_effectiveness_max, efficiency_loss,
@@ -150,7 +152,7 @@ L_zone = [current_date_num, company_name, rating, popularity, efficiency, enviro
     wages_total/1000000, advertising_budget/1000000,
     daily_profit/1000000, ROI, ROI2]
 
-ws_evo = gc.open_by_key(sheetKey).worksheet('Evolution')
+ws_evo = gc.open_by_key(sheetKey).worksheet('evolution')
 current_row = ws_evo.cell(1,3).value # last row that has already been written
 current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
 zone_to_be_filled = "A" + str(current_row) + ":ZZ" + str(current_row)
