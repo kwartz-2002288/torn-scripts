@@ -3,7 +3,7 @@ from datetime import time, datetime, timezone, timedelta
 import readKeysLib
 
 
-days_alert_limit = 15
+days_alert_limit = 5
 
 
 # script execution start schedule
@@ -45,7 +45,7 @@ all_good = True
 not_rented = 0
 
 for property_id, property in properties_info.items():
-    if property["status"] == "Owned by them": #and property["property"] == "Private Island":
+    if property["status"] == "Owned by them" and property["property"] == "Private Island":
 
         if property["rented"] is not None: # PI is rented
             days_left = property["rented"]["days_left"]
