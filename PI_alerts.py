@@ -3,7 +3,7 @@ from datetime import time, datetime, timezone, timedelta
 import readKeysLib
 
 
-days_alert_limit = 5
+days_alert_limit = 15
 
 
 # script execution start schedule
@@ -42,22 +42,26 @@ message = f"{current_date_str} UTC\nAlert from Torn properties\n"
 
 activity_message = ""
 all_good = True
+not_rented = 0
 
 for property_id, property in properties_info.items():
-    if property["status"] == "Owned by them" and property["property"] == "Private Island":
+    if property["status"] == "Owned by them": #and property["property"] == "Private Island":
 
         if property["rented"] is not None: # PI is rented
             days_left = property["rented"]["days_left"]
             if days_left < days_alert_limit:
                 all_good = False
                 message += f"PI lease ending in {days_left} days\n"
-        else:
+        else: # PI is not rented
             all_good = False
-            message += f"PI not rented\n"
+            not_rented += 1
 
 if all_good:
     message += "All good!"
+else:
+    if not_rented > 0:
+        message += f"{not_rented} PI not rented\n"
+    check = send_SMS(message)
 
 print(message)
-check = send_SMS(message)
 print(f"SMS sending report: {check}")
