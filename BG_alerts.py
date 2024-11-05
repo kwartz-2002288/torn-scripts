@@ -33,7 +33,7 @@ def send_SMS(message):
     return check
 
 id_Nikeh = "111"
-id_Boxing_Gloves = "330"
+id_Boxing_Gloves = "331"
 def get_shop_info():
     Nikeh_shop = requests.get(f" https://api.torn.com/torn/?selections=cityshops&&key={APIKEY}").json()["cityshops"][id_Nikeh]
     return Nikeh_shop
@@ -50,4 +50,4 @@ if id_Boxing_Gloves in Nikeh_shop_inventory:
     check = send_SMS(message)
     print(f"SMS sending report: {check}")
 else:
-    print("No boxing gloves available!")
+    print("No boxing gloves available.")
