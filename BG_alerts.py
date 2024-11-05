@@ -33,7 +33,7 @@ def send_SMS(message):
     return check
 
 id_Nikeh = "111"
-id_Boxing_Gloves = "331"
+id_Boxing_Gloves = "330"
 def get_shop_info():
     Nikeh_shop = requests.get(f" https://api.torn.com/torn/?selections=cityshops&&key={APIKEY}").json()["cityshops"][id_Nikeh]
     return Nikeh_shop
