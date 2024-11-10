@@ -7,7 +7,7 @@ now_date = datetime.now(timezone.utc)
 current_date_str = now_date.strftime("%d/%m/%Y %H:%M:%S")
 
 # limits
-trains_alert_limit = 7
+trains_alert_limit = 10
 hours_to_evaluation_limit = 24
 
 # company evaluation schedule
