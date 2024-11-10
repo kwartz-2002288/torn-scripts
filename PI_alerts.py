@@ -61,6 +61,6 @@ if all_good:
 else:
     if not_rented > 0:
         message += f"{not_rented} PI not rented\n"
-        check = send_SMS(message)
-        print(f"SMS sending report: {check}")
-print(message)
+    check = send_SMS(message)
+    print(message)
+    print(f"SMS sending report: {check}")
