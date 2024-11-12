@@ -18,7 +18,7 @@ delta_hours_to_evaluation = (evaluation_time - now_date).total_seconds() / 3600
 
 # set_up
 APIKey_dict, sheetKey_dict, nodeName = readKeysLib.getDicts()
-repertory=sheetKey_dict['rep']
+repertory = sheetKey_dict['rep']
 APIKEY = APIKey_dict["Kwartz"] # API key for torn
 
 # Free mobile API user's informations and error codes
@@ -54,7 +54,15 @@ rating = company["rating"]
 # Prepare Message
 all_good = True
 message = f"NNN {rating}* network company\n"
-message += (f"{delta_hours_to_evaluation:.1f}h before evaluation\n")
+
+# Calcul de la valeur absolue et de l'orientation temporelle
+before_after = "before" if delta_hours_to_evaluation > 0 else "after"
+delta_hours_to_evaluation = abs(delta_hours_to_evaluation)
+
+if delta_hours_to_evaluation > 1:
+    message += f"{round(delta_hours_to_evaluation)} hrs {before_after} evaluation\n"
+else:
+    message += f"{round(delta_hours_to_evaluation * 60)} min {before_after} evaluation\n"
 
 if employees_hired < employees_capacity:
     all_good = False
