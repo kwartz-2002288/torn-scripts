@@ -71,7 +71,8 @@ def updatePersonalStats(name):
             + [delta_1, delta_10, delta_365/1000000] \
             + L_stats[5:9] + [delta_job_1, delta_job_50]
     zone_to_be_filled = "A" + str(current_row) + ":O" + str(current_row)
-    ws.update(zone_to_be_filled, [L_zone])
+    #ws.update(zone_to_be_filled, [L_zone])
+    ws.update(range_name=zone_to_be_filled, values=[L_zone])
     ws.update_cell(2,1,'Updated by ' + nodeName)
     return new_total_stats
 
@@ -82,4 +83,4 @@ delta = L[0] - L[1]
 ws = gc.open_by_key(sheetKey).worksheet('StatsKwartz')
 current_row = ws.cell(1,2).value # last row that has already been written
 current_row = int(current_row.replace(",", "").replace(" ", "")) #clean string and convert to int
-ws.update('P'+ str(current_row), delta)
+ws.update(range_name='P'+ str(current_row), values=[[delta]])

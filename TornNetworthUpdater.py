@@ -151,7 +151,7 @@ current_row = int(ws.cell(1,2).value) + 1 # row where we will write new data
 N_average = 30
 old_NW = ws.acell("H" + str(current_row - N_average)).value
 old_NW =  int(old_NW.replace(",", "").replace(" ", "")) # remove trailing and inside spaces
-old_date = ws.cell(str(current_row - N_average),1).value
+old_date = ws.cell(current_row - N_average,1).value
 old_date_dt = datetime.strptime(old_date, '%d/%m/%Y %H:%M:%S') # convert to datetime
 
 delta_days = (datetime.now() - old_date_dt).days # use deltatime object
@@ -163,7 +163,7 @@ Delta = int(RealNetworth  - old_NW_1)
 
 L = [[current_date_num, NetworthTotal, StockTotal, CompanyTotal, FactionDonationTotal, VaultTotal, RealStocks, RealNetworth, NetworthKwartz/1000000000., NetworthKivou/1000000000., Cash, Delta, Delta_averaged]]
 zone_to_be_filled = "A" + str(current_row) + ":M" + str(current_row)
-ws.update(zone_to_be_filled, L)
-
+#ws.update(zone_to_be_filled, L)
+ws.update(range_name=zone_to_be_filled, values=L)
 # ws.update_cell(1,2,current_row) (now done by MATCH fonction in spreadsheet)
 ws.update_cell(2,2,nodeName)

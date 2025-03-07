@@ -69,7 +69,8 @@ def updateRehab(name, gc, sheetKey, APIKey_dict):
                 L = [current_date_num, new_xantaken, new_lsdtaken, new_opitaken,
                     new_cantaken, new_victaken, xan_market_value]
                 zone_to_be_filled = "A" + str(current_row) + ":G" + str(current_row)
-                ws.update(zone_to_be_filled, [L])
+                # ws.update(zone_to_be_filled, [L])
+                ws.update(range_name=zone_to_be_filled, values=[L])
                 # ws.update_cell(current_row,1,current_date_num)
                 # ws.update_cell(current_row,2,new_xantaken)
                 # ws.update_cell(current_row,3,new_lsdtaken)
