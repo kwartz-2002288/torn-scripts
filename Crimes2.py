@@ -84,5 +84,5 @@ def updateCrimes(name):
         ws.update(range_name=zone_to_be_filled, values=[crimes2_data])
 
 for name in ('Kwartz','Kivou'):
-    print(name)
+    #print(name)
     updateCrimes(name)

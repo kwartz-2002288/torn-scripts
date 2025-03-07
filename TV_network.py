@@ -121,10 +121,10 @@ employees = [employees_header] + employees
 
 ws = gc.open_by_key(sheetKey).worksheet('employees_raw')
 ws.clear()
-ws.update("A1:Z51",employees)
+ws.update(range_name="A1:Z51",values=employees)
 ws2 = gc.open_by_key(sheetKey2).worksheet('employees_raw')
 ws2.clear()
-ws2.update("A1:Z51",employees)
+ws2.update(range_name="A1:Z51",values=employees)
 
 ws = gc.open_by_key(sheetKey).worksheet('wages')
 ws2 = gc.open_by_key(sheetKey2).worksheet('wages')
@@ -156,4 +156,4 @@ ws_evo = gc.open_by_key(sheetKey).worksheet('evolution')
 current_row = ws_evo.cell(1,3).value # last row that has already been written
 current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
 zone_to_be_filled = "A" + str(current_row) + ":ZZ" + str(current_row)
-ws_evo.update(zone_to_be_filled, [L_zone])
+ws_evo.update(range_name=zone_to_be_filled, values=[L_zone])
