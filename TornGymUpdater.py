@@ -30,7 +30,7 @@ def updateSpecialGym ( name , gc, sheetKey, APIKey_dict, therow ):
         for thestat in ['dexterity','defense','speed','strength']:
                 L.append(int(float(r[thestat])))
         zone_to_be_filled = "A" + therow + ":E" + therow
-        ws.update(zone_to_be_filled, [L])
+        ws.update(range_name=zone_to_be_filled, values=[L])
         return
 
 updateSpecialGym( "Kivou" , gc, sheetKey, APIKey_dict, "1")
