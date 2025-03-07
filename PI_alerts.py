@@ -2,8 +2,8 @@ import requests, string
 from datetime import time, datetime, timezone, timedelta
 import readKeysLib
 
-
-days_alert_limit = 5
+# days before lease end
+days_alert_limit = 4
 
 
 # script execution start schedule
