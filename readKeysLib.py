@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 # name2 APIkey2 etc...
 
 nodeName = os.uname().nodename
-if nodeName == 'raspberrypi' or nodeName == 'acer':
+if nodeName == 'raspberrypi' or nodeName == 'acer' or nodeName == 'MacMini':
     repertory = '/home/jpr/torn-data/DATA/' # Rapsberry or acer path
 elif nodeName == 'iMac-JP.local' or 'MacBook-JP.local':
     repertory = '/Users/jpr/torn-data/DATA/' # Mac path

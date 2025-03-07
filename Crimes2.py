@@ -80,7 +80,8 @@ def updateCrimes(name):
         current_row = ws.cell(1,3).value # last row that has already been written
         current_row = 1 + int(''.join(current_row.split())) #clean string and convert to int
         zone_to_be_filled = "A" + str(current_row) + ":Z" + str(current_row)
-        ws.update(zone_to_be_filled, [crimes2_data])
+        #ws.update(zone_to_be_filled, [crimes2_data])
+        ws.update(range_name=zone_to_be_filled, values=[crimes2_data])
 
 for name in ('Kwartz','Kivou'):
     print(name)
